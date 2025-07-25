@@ -1,14 +1,31 @@
 import { createContext } from "react";
 import { supabase } from "../supabase/supabase-client.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+
 export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-    const [user, setUser] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
 
-    //event listener trqbva 
+    useEffect(() => {
+        //function that checks if there is an active session on INITIAL load
+        const getSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            //if there is no session the user is set to null
+            setUser(session?.user ?? null);
+        };
+        getSession();
+
+        //event listener that listens for changes in user
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            //if there is a change -> update user
+            setUser(session?.user ?? null);
+        });
+
+        return () => listener.subscription.unsubscribe();
+    }, []);
 
     //creating a new account
     const handleSignUp = async (email, password) => {
@@ -17,7 +34,9 @@ function AuthProvider({ children }) {
             if (error) { throw error; }
             setUser(data?.user);
 
-            alert("Sign up successful")
+            alert("Sign up successful");
+            //navigate to home page
+            navigate("/");
         }
         catch (error) {
             console.error(error);
@@ -27,12 +46,16 @@ function AuthProvider({ children }) {
 
     //enter an existing account
     const handleSignIn = async (email, password) => {
+
         try {
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) { throw error; }
 
             setUser(data?.user);
-            alert("Sign in successful")
+            alert("Sign in successful");
+            //navigate to home page
+            navigate("/");
+
         }
         catch (error) {
             console.error(error);
@@ -45,7 +68,8 @@ function AuthProvider({ children }) {
         try {
             const { error } = await supabase.auth.signOut();
             if (error) { throw error; }
-            //navigate to ...
+            //navigate to signIn
+            navigate("/signIn");
             setUser(null);
         }
         catch (error) {
@@ -55,7 +79,7 @@ function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext value={{ user, email, password, handleSignIn, handleSignOut, handleSignUp }}>
+        <AuthContext value={{ user, handleSignIn, handleSignOut, handleSignUp }}>
             {children}
         </AuthContext>
     );

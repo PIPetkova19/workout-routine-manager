@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
-/*ENTER AN EXISTING ACCOUNT*/ 
+/*CREATE A NEW ACCOUNT*/ 
 
 //validation with yup
 const validationSchema = yup.object({
