@@ -10,6 +10,7 @@ function AuthProvider({ children }) {
 
     //event listener trqbva 
 
+    //creating a new account
     const handleSignUp = async (email, password) => {
         try {
             const { data, error } = await supabase.auth.signUp({ email, password });
@@ -24,6 +25,7 @@ function AuthProvider({ children }) {
         }
     };
 
+    //enter an existing account
     const handleSignIn = async (email, password) => {
         try {
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -38,6 +40,7 @@ function AuthProvider({ children }) {
         }
     };
 
+    //sign out
     const handleSignOut = async () => {
         try {
             const { error } = await supabase.auth.signOut();
@@ -50,8 +53,6 @@ function AuthProvider({ children }) {
             alert(error.message);
         }
     };
-
-
 
     return (
         <AuthContext value={{ user, email, password, handleSignIn, handleSignOut, handleSignUp }}>
