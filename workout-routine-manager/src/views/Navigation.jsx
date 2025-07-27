@@ -19,6 +19,7 @@ const drawerWidth = 220;
 
 export default function Navigation() {
   const FitBitIcon = iconMap["FitBit"];
+  const MenuIcon= iconMap["Menu"];
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
 
@@ -53,7 +54,7 @@ export default function Navigation() {
                 transform: "translateY(-50%)",
               }}
             >
-              <MenuTwoTone />
+              <MenuIcon />
             </IconButton>
           )}
           <FitBitIcon />
