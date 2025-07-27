@@ -26,6 +26,7 @@ function App() {
             p: 3,
             ml: { md: `${drawerWidth}px` },
             mt: { xs: "64px", md: "64px" },
+            width: "100%",
           }}
         >
           <Routes>

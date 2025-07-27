@@ -8,28 +8,17 @@ import {
   Drawer,
   Divider,
   List,
-  Button,
   useTheme,
   useMediaQuery,
   IconButton,
 } from "@mui/material";
-import FitbitTwoToneIcon from "@mui/icons-material/FitbitTwoTone"; // <-- добави MailIcon
-import { CreateListItem } from "./theme/Theme";
-import {
-  SpaceDashboardTwoTone,
-  FitnessCenterTwoTone,
-  SmartToyTwoTone,
-  CalendarMonthTwoTone,
-  SettingsTwoTone,
-  AccountCircleTwoTone,
-  MenuTwoTone,
-} from "@mui/icons-material";
-
+import { CreateListItem, BasicButton, iconMap } from "./theme/Theme";
 import { Link } from "react-router-dom";
 
 const drawerWidth = 220;
 
 export default function Navigation() {
+  const FitBitIcon = iconMap["FitBit"];
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
 
@@ -50,30 +39,30 @@ export default function Navigation() {
           sx={{
             displex: "flex",
             justifyContent: "center",
-            postion: "relative"
+            postion: "relative",
           }}
         >
           {isMobile && (
-            <IconButton 
-              color="inherit" 
-              onClick={() => setDrawerOpen((prev) => !prev)} 
-              sx={{ 
+            <IconButton
+              color="inherit"
+              onClick={() => setDrawerOpen((prev) => !prev)}
+              sx={{
                 position: "absolute",
                 left: 0,
                 top: "50%",
                 transform: "translateY(-50%)",
-              }}>
+              }}
+            >
               <MenuTwoTone />
             </IconButton>
           )}
-          <FitbitTwoToneIcon sx={{ mr: 1 }}/>
+          <FitBitIcon />
           <Typography variant="h6" noWrap component="div">
             Fitness Tracker
           </Typography>
         </Toolbar>
       </AppBar>
 
-      {/*Desktop Drawer*/}
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         open={drawerOpen}
@@ -91,31 +80,27 @@ export default function Navigation() {
         <Box onClick={toggleDrawer(false)} sx={{ overflow: "auto" }}>
           <List>
             <Link to={"/"}>
-              <CreateListItem Icon={SpaceDashboardTwoTone} text="Dashboard" />
+              <CreateListItem iconName="Dashboard" text="Dashboard" />
             </Link>
             <Link to={"/routines"}>
-              <CreateListItem Icon={FitnessCenterTwoTone} text="Routines" />
+              <CreateListItem iconName="Routines" text="Routines" />
             </Link>
             <Link to={"/calendar"}>
-              <CreateListItem Icon={CalendarMonthTwoTone} text="Calendar" />
+              <CreateListItem iconName="Calendar" text="Calendar" />
             </Link>
             <Link to={"/assistant"}>
-              <CreateListItem Icon={SmartToyTwoTone} text="AI Assistant" />
+              <CreateListItem iconName="Assistant" text="AI Assistant" />
             </Link>
           </List>
         </Box>
         <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
           <Divider />
-          <List sx={{ display: "flex", justifyContent: "center"}}>
+          <List sx={{ display: "flex", justifyContent: "center" }}>
             <Link to={"/accsettings"}>
-              <Button variant="outlined" sx={{ mr: 2 }}>
-                <AccountCircleTwoTone />
-              </Button>
+              <BasicButton iconName="Account" />
             </Link>
             <Link to={"/appsettings"}>
-              <Button variant="outlined">
-                <SettingsTwoTone />
-              </Button>
+              <BasicButton iconName="Settings" />
             </Link>
           </List>
         </Box>

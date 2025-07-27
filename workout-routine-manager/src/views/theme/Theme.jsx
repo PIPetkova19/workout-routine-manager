@@ -3,9 +3,34 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Button,
 } from "@mui/material";
 
-export function CreateListItem({Icon, text}) {
+import {
+  SpaceDashboardTwoTone,
+  FitnessCenterTwoTone,
+  CalendarMonthTwoTone,
+  SmartToyTwoTone,
+  SettingsTwoTone,
+  AccountCircleTwoTone,
+  FitbitTwoTone,
+  MenuTwoTone,
+} from "@mui/icons-material";
+
+export const iconMap = {
+  Dashboard: SpaceDashboardTwoTone,
+  Routines: FitnessCenterTwoTone,
+  Calendar: CalendarMonthTwoTone,
+  Assistant: SmartToyTwoTone,
+  Settings: SettingsTwoTone,
+  Account: AccountCircleTwoTone,
+  FitBit: FitbitTwoTone,
+  Menu: MenuTwoTone,
+};
+
+export function CreateListItem({ iconName, text }) {
+  const IconComponent = iconMap[iconName]
+
   return (
     <ListItem>
       <ListItemButton
@@ -17,7 +42,7 @@ export function CreateListItem({Icon, text}) {
         }}
       >
         <ListItemIcon sx={{ minWidth: 32, mr: 1 }}>
-          <Icon color="primary" />
+          <IconComponent color="primary" />
         </ListItemIcon>
         <ListItemText sx={{ ml: 1, color: "#1976d2" }}>{text}</ListItemText>
       </ListItemButton>
@@ -25,8 +50,12 @@ export function CreateListItem({Icon, text}) {
   );
 }
 
-/*export function CreateButton(){
-    return (
+export function BasicButton({ iconName }) {
+  const IconComponent = iconMap[iconName]
 
-    )
-}*/
+  return (
+    <Button variant="outlined" sx={{ mr: 2 }}>
+      <IconComponent />
+    </Button>
+  );
+}
