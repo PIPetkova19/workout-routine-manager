@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import GoogleIcon from '@mui/icons-material/Google';
-import IconButton from '@mui/material/IconButton';
 
 /*CREATE A NEW ACCOUNT*/
 
@@ -126,18 +125,16 @@ function SignUp() {
 
                     {/*google sign up*/}
                     <Box>
-                        <Typography variant="subtitle1" component="p">or continue with</Typography>
+                        <Button variant="outlined" onClick={signUpGoogle} startIcon={<GoogleIcon />}>
+                            Sign up with google
+                        </Button>
                     </Box>
 
-                    <Box>
-                        <IconButton aria-label="google">
-                            <GoogleIcon onClick={signUpGoogle} />
-                        </IconButton>
-                    </Box>
+
 
                     {/*Sign in link*/}
                     <Box>
-                        <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                        <Typography variant="subtitle2" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
                             Already have an account?
                             <Link to="/signIn" style={{ fontWeight: "bold", textDecoration: "none" }}>
                                 Sign in

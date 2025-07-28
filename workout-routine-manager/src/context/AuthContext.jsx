@@ -85,9 +85,9 @@ function AuthProvider({ children }) {
                 provider: 'google'
             })
             if (error) { throw error; }
-           
-            setUser(data?.user); 
-             //navigate to home
+
+            setUser(data?.user);
+            //navigate to home
             navigate("/");
         }
         catch (error) {
@@ -96,8 +96,43 @@ function AuthProvider({ children }) {
         }
     }
 
+    //forgotten pass
+    const handleForgottenPassword = async (email) => {
+        try {
+            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                //link to update user page
+                redirectTo: 'http://localhost:5174/updateUser',
+            })
+            alert("Email sent!");
+            if (error) { throw error; }
+        }
+
+        catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    }
+
+    //update user pass
+    const handleUserUpdate = async (password) => {
+        try {
+            const { data, error } = await supabase.auth.updateUser({password });
+            if (error) { throw error; }
+            alert("User update successfully!");
+            setUser(data?.user);
+            //navigate to sign in
+            navigate("/signIn");
+        }
+
+        catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    }
+
     return (
-        <AuthContext value={{ user, handleSignIn, handleSignOut, handleSignUp, handleSignUpGoogle }}>
+        <AuthContext value={{ user, handleSignIn, handleSignOut, handleSignUp,
+         handleSignUpGoogle, handleForgottenPassword, handleUserUpdate}}>
             {children}
         </AuthContext>
     );

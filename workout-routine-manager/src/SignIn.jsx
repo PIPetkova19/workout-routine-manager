@@ -13,7 +13,7 @@ import Divider from '@mui/material/Divider';
 function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { handleSignIn } = use(AuthContext);
+    const { handleSignIn, handleForgottenPassword} = use(AuthContext);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -86,6 +86,11 @@ function SignIn() {
                         />
                     </Box>
 
+                    {/*forgotten pass link*/}
+                    <Box>
+                      <Link to="/resetPassword">Forgot your password?</Link>  
+                    </Box>
+
                     {/*Sign in button*/}
                     <Box>
                         <Button color="primary" variant="contained" type="submit">
@@ -94,7 +99,7 @@ function SignIn() {
                     </Box>
 
                     <Divider></Divider>
-                    
+
                     {/*Sign up link*/}
                     <Box>
                         <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>

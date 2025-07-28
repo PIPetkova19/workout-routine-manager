@@ -3,6 +3,8 @@ import SignUp from "./SignUp"
 import SignIn from "./SignIn"
 import Home from "./Home"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ResetPassword from "./ResetPassword";
+import UpdateUser from "./UpdateUser";
 
 
 function App() {
@@ -14,9 +16,9 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/" element={<Home />} />
-
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/updateUser" element={<UpdateUser />} />
         </Routes>
-
       </AuthProvider>
     </Router>
   )
