@@ -64,6 +64,7 @@ function SignIn() {
 
                     </Box>
 
+                    {/*email and password fields*/}
                     <Box>
                         <TextField
                             id="email"
@@ -85,14 +86,16 @@ function SignIn() {
                         />
                     </Box>
 
+                    {/*Sign in button*/}
                     <Box>
                         <Button color="primary" variant="contained" type="submit">
-                            Submit
+                            Sign in
                         </Button>
                     </Box>
 
                     <Divider></Divider>
-
+                    
+                    {/*Sign up link*/}
                     <Box>
                         <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
                             Don't have an account?

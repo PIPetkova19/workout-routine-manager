@@ -78,8 +78,26 @@ function AuthProvider({ children }) {
         }
     };
 
+    //sign up with google
+    const handleSignUpGoogle = async () => {
+        try {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google'
+            })
+            if (error) { throw error; }
+           
+            setUser(data?.user); 
+             //navigate to home
+            navigate("/");
+        }
+        catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    }
+
     return (
-        <AuthContext value={{ user, handleSignIn, handleSignOut, handleSignUp }}>
+        <AuthContext value={{ user, handleSignIn, handleSignOut, handleSignUp, handleSignUpGoogle }}>
             {children}
         </AuthContext>
     );

@@ -9,8 +9,10 @@ import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import GoogleIcon from '@mui/icons-material/Google';
+import IconButton from '@mui/material/IconButton';
 
-/*CREATE A NEW ACCOUNT*/ 
+/*CREATE A NEW ACCOUNT*/
 
 //validation with yup
 const validationSchema = yup.object({
@@ -24,9 +26,12 @@ const validationSchema = yup.object({
         .required('Password is required'),
 });
 
-const SignUp = () => {
+function SignUp() {
     //use new syntax for useContext
     const { handleSignUp } = use(AuthContext);
+    const { handleSignUpGoogle } = use(AuthContext);
+
+    //formik validation
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -38,6 +43,11 @@ const SignUp = () => {
         },
     });
 
+    //google sign up
+    const signUpGoogle = async () => {
+        await handleSignUpGoogle();
+    }
+
     return (
         <Box sx={{
             height: "100vh",
@@ -47,7 +57,6 @@ const SignUp = () => {
             textAlign: "center",
         }}>
             <form onSubmit={formik.handleSubmit}>
-                {/*Stack raboti samo varhu direktni deca*/}
                 <Stack
                     spacing={3}
                     sx={{
@@ -59,14 +68,14 @@ const SignUp = () => {
                         padding: {
                             xs: '30px 16px',
                             sm: '50px 20px',
-                        }, 
-                        border:"1px solid black",
+                        },
+                        border: "1px solid black",
                         boxShadow: "5px 5px 5px #1e1e1eb9",
                         borderRadius: "5px",
                     }}
                 >
                     <Box>
-                        <Typography variant="h3" component="h1" sx={{color:"rgba(0, 0, 0, 1)"}}>
+                        <Typography variant="h3" component="h1" sx={{ color: "rgba(0, 0, 0, 1)" }}>
                             Sign Up
                         </Typography>
                     </Box>
@@ -74,9 +83,10 @@ const SignUp = () => {
 
                         <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
                             Enter your details below  to create your account.
-                            </Typography>
+                        </Typography>
                     </Box>
 
+                    {/*email and password fields*/}
                     <Box>
                         <TextField
                             id="email"
@@ -104,20 +114,33 @@ const SignUp = () => {
                         />
                     </Box>
 
+                    {/*sign up button*/}
                     <Box>
                         <Button color="primary" variant="contained" type="submit">
-                            Submit
+                            Sign Up
                         </Button>
                     </Box>
 
                     {/*hr*/}
                     <Divider></Divider>
 
+                    {/*google sign up*/}
+                    <Box>
+                        <Typography variant="subtitle1" component="p">or continue with</Typography>
+                    </Box>
+
+                    <Box>
+                        <IconButton aria-label="google">
+                            <GoogleIcon onClick={signUpGoogle} />
+                        </IconButton>
+                    </Box>
+
+                    {/*Sign in link*/}
                     <Box>
                         <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
-                             Already have an account?
-                            <Link to="/signIn" style={{fontWeight:"bold", textDecoration:"none"}}> 
-                            Sign in
+                            Already have an account?
+                            <Link to="/signIn" style={{ fontWeight: "bold", textDecoration: "none" }}>
+                                Sign in
                             </Link>
                         </Typography>
                     </Box>
