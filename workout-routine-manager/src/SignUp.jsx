@@ -10,6 +10,12 @@ import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import GoogleIcon from '@mui/icons-material/Google';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { styled } from '@mui/material/styles';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import InputAdornment from '@mui/material/InputAdornment';
+import HttpsIcon from '@mui/icons-material/Https';
 
 /*CREATE A NEW ACCOUNT*/
 
@@ -23,6 +29,18 @@ const validationSchema = yup.object({
         .string('Enter your password')
         .min(8, 'Password should be of minimum 8 characters length')
         .required('Password is required'),
+});
+
+
+
+const StyledButton = styled(Button)({
+    textTransform: "lowercase",
+    borderRadius: "9px",
+});
+
+const FirstLetter = styled('span')({
+    textTransform: "uppercase",
+    paddingLeft: "5px"
 });
 
 function SignUp() {
@@ -48,102 +66,154 @@ function SignUp() {
     }
 
     return (
-        <Box sx={{
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-        }}>
-            <form onSubmit={formik.handleSubmit}>
-                <Stack
-                    spacing={3}
-                    sx={{
-                        width: {
-                            xs: '90%',
-                            sm: '90%',
-                        },
-                        maxWidth: '900px',
-                        padding: {
-                            xs: '30px 16px',
-                            sm: '50px 20px',
-                        },
-                        border: "1px solid black",
-                        boxShadow: "5px 5px 5px #1e1e1eb9",
-                        borderRadius: "5px",
-                    }}
-                >
-                    <Box>
-                        <Typography variant="h3" component="h1" sx={{ color: "rgba(0, 0, 0, 1)" }}>
-                            Sign Up
-                        </Typography>
-                    </Box>
-                    <Box>
+        <Box
+            component="form"
+            onSubmit={formik.handleSubmit} sx={{
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "left",
+            }}>
 
-                        <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
-                            Enter your details below  to create your account.
-                        </Typography>
-                    </Box>
+            <Stack
+                spacing={3}
+                sx={{
+                    width: {
+                        xs: '90%',
+                        sm: '70%',
+                        md: '60%',
+                        lg: '50%',
+                        xl: '35%',
+                    },
+                    minWidth: '200px',
+                    maxWidth: '900px',
 
-                    {/*email and password fields*/}
-                    <Box>
+                    // height: {
+                    //     xs: '50%',
+                    //     sm: '50%',
+                    //     md: '55%',
+                    //     lg: '55%',
+                    //     xl: '90%',
+                    // },
+                    minHeight: '200px',
+                    //maxHeight: '1000px',
+                    padding: {
+                        xs: '30px 16px',
+                        sm: '50px 20px',
+                    },
+                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;",
+                    borderRadius: "5px",
+                }}
+            >
+                <Box>
+                    <Typography variant="h3" component="h1" color="primary"
+                        sx={{ fontWeight: "bold" }}>
+                        Sign Up
+                    </Typography>
+                </Box>
+                <Box>
+
+                    <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                        Enter your details below  to create your account.
+                    </Typography>
+                </Box>
+
+                {/*email and password fields*/}
+                <Box>
+                    <FormControl fullWidth>
+                        <FormLabel htmlFor="email">Email</FormLabel>
                         <TextField
                             id="email"
                             name="email"
-                            label="Email"
+                            placeholder="your@email.com"
                             value={formik.values.email}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.email && Boolean(formik.errors.email)}
                             helperText={formik.touched.email && formik.errors.email}
+                            //user icon
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <AccountCircle />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
                         />
-                    </Box>
+                    </FormControl>
+                </Box>
 
-                    <Box>
+                <Box>
+                    <FormControl fullWidth>
+                        <FormLabel htmlFor="password">Password</FormLabel>
                         <TextField
                             id="password"
                             name="password"
-                            label="Password"
                             type="password"
+                            placeholder="••••••"
                             value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.password && Boolean(formik.errors.password)}
                             helperText={formik.touched.password && formik.errors.password}
+                            //password icon
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <HttpsIcon />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
                         />
-                    </Box>
+                    </FormControl>
 
-                    {/*sign up button*/}
-                    <Box>
-                        <Button color="primary" variant="contained" type="submit">
-                            Sign Up
-                        </Button>
-                    </Box>
+                </Box>
 
-                    {/*hr*/}
-                    <Divider></Divider>
+                {/*sign up button*/}
+                <Box>
+                    <StyledButton fullWidth
+                        color="primary"
+                        variant="contained"
+                        type="submit">
+                        <FirstLetter>S</FirstLetter>ign up
+                    </StyledButton>
+                </Box>
 
-                    {/*google sign up*/}
-                    <Box>
-                        <Button variant="outlined" onClick={signUpGoogle} startIcon={<GoogleIcon />}>
-                            Sign up with google
-                        </Button>
-                    </Box>
+                {/*hr*/}
+                <Divider>
+                    <Typography sx={{ color: "rgba(52, 52, 52, 1)" }}>or</Typography>
+                </Divider>
+
+                {/*google sign up*/}
+                <Box>
+                    <StyledButton fullWidth
+                        variant="outlined"
+                        onClick={signUpGoogle}
+                        startIcon={<GoogleIcon />}
+                        sx={{ fontWeight: "bold" }}>
+                        <FirstLetter>S</FirstLetter>ign up with
+                        <FirstLetter>g</FirstLetter>oogle
+                    </StyledButton>
+                </Box>
 
 
 
-                    {/*Sign in link*/}
-                    <Box>
-                        <Typography variant="subtitle2" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
-                            Already have an account?
-                            <Link to="/signIn" style={{ fontWeight: "bold", textDecoration: "none" }}>
-                                Sign in
-                            </Link>
-                        </Typography>
-                    </Box>
+                {/*Sign in link*/}
+                <Box>
+                    <Typography variant="subtitle2" component="p" sx={{ textAlign: "center", color: "rgba(52, 52, 52, 1)" }}>
+                        Already have an account?{' '}
+                        <Link to="/signIn" style={{ fontWeight: "bold", textDecoration: "none" }}>
+                            Sign in
+                        </Link>
+                    </Typography>
+                </Box>
 
-                </Stack>
-            </form>
+            </Stack>
         </Box>
     );
 };
