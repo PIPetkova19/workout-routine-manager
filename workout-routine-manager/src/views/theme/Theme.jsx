@@ -5,6 +5,8 @@ import {
   ListItemText,
   Button,
   Card,
+  CardContent,
+  Typography,
 } from "@mui/material";
 
 import {
@@ -58,5 +60,20 @@ export function BasicButton({ iconName }) {
     <Button variant="outlined" sx={{ mr: 2 }}>
       <IconComponent />
     </Button>
+  );
+}
+
+export function CreateCard({ text, data }){
+  return (
+    <Card >
+      <CardContent >
+        <Typography variant="h6">
+          {text}
+        </Typography>
+        <Typography variant="h4">
+          {data}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
