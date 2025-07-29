@@ -63,7 +63,7 @@ export function BasicButton({ iconName }) {
   );
 }
 
-export function CreateCard({ text, data }){
+export function CreateCard({ text, data, width = "100%" }){
   return (
     <Card >
       <CardContent >

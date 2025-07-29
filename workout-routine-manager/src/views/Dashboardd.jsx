@@ -19,7 +19,7 @@ export default function Dashboard() {
                 Here's your progress overview.
             </Typography>
         </Box>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <CreateCard text={`Workouts This Month`} data={`${fitnessData.January.workoutsThisMonth}`}/>
             <CreateCard text={`Current Streak`} data={`${fitnessData.January.currentStreak} days`}/>
             <CreateCard text={`Total Volume Lifted`} data={`${fitnessData.January.totalVolumeLifted} kg`}/>

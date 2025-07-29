@@ -1,8 +1,8 @@
 import { useState } from "react";
-import AuthProvider from "./context/AuthContext"
+import AuthProvider from "./context/AuthContext";
 import "./App.css";
-import SignUp from "./SignUp"
-import SignIn from "./SignIn"
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
 import Dashboard from "./views/Dashboardd";
 import Calendar from "./views/Calendar";
 import Assistant from "./views/Assistant";
@@ -44,7 +44,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", minHeight: "100%" }}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -122,27 +122,25 @@ export default function App() {
         <Box
           component="main"
           sx={{
-            flexGrow: 1,
             p: 3,
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
             backgroundColor: "#F0F0F0",
           }}
         >
           <Toolbar />
           <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/routines" element={<Routines />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/assistant" element={<Assistant />} />
-            <Route path="/appsettings" element={<AppSettings />} />
-            <Route path="/accsettings" element={<AccSettings />} />
-            <Route path="/signUp" element={<SignUp />} />
-          <Route path="/signIn" element={<SignIn />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/updateUser" element={<UpdateUser />} />
-          </Routes>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/routines" element={<Routines />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/assistant" element={<Assistant />} />
+              <Route path="/appsettings" element={<AppSettings />} />
+              <Route path="/accsettings" element={<AccSettings />} />
+              <Route path="/signUp" element={<SignUp />} />
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
+              <Route path="/updateUser" element={<UpdateUser />} />
+            </Routes>
           </AuthProvider>
         </Box>
       </Box>
