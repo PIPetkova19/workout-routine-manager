@@ -4,7 +4,7 @@ import { fitnessData } from "../dataMockUp/data";
 
 export default function Dashboard() {
   return (
-    <Box sx={{  }}>
+    <Box>
         <Box sx={{ 
             backgroundColor: "white",
             borderRadius: 2,
