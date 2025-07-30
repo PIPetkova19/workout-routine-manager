@@ -1,6 +1,9 @@
-import { Box, Typography } from "@mui/material";
-import { CreateCard } from "./theme/Theme";
+import { Box, Typography, Grid} from "@mui/material";
+import { BarsDataset, CreateCard } from "./theme/Theme";
 import { fitnessData } from "../dataMockUp/data";
+
+const currentMonth = new Date().getMonth();
+const dataToShow = [ { dataKey: "workoutFrequency", label: "workoutFrequency", color: "#1976d2"},];
 
 export default function Dashboard() {
   return (
@@ -19,11 +22,26 @@ export default function Dashboard() {
                 Here's your progress overview.
             </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <CreateCard text={`Workouts This Month`} data={`${fitnessData.January.workoutsThisMonth}`}/>
-            <CreateCard text={`Current Streak`} data={`${fitnessData.January.currentStreak} days`}/>
-            <CreateCard text={`Total Volume Lifted`} data={`${fitnessData.January.totalVolumeLifted} kg`}/>
-            <CreateCard text={`Active This Week`} data={`+${fitnessData.January.activeThisWeek}`}/>
+        <Box>
+            <Grid container spacing={2} >
+                <Grid size={3}>
+                    <CreateCard text={"Workouts This Month"} data={`${fitnessData[currentMonth].workoutsThisMonth}`}/>
+                </Grid>
+                <Grid size={3}>
+                    <CreateCard text={"Current Streak"} data={`${fitnessData[currentMonth].currentStreak} days`}/>
+                </Grid>
+                <Grid size={3}>
+                    <CreateCard text={"Total Volume Lifted"} data={`${fitnessData[currentMonth].totalVolumeLifted} kg`}/>
+                </Grid>
+                <Grid size={3}>
+                    <CreateCard text={"Active This Week"} data={`+${fitnessData[currentMonth].activeThisWeek}`}/>
+                </Grid>
+                <Grid size={12}>
+                    <BarsDataset  data={fitnessData} toShow={dataToShow} keyProp="month" name="Your Workout Frequency"/>
+                </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+            </Grid>
         </Box>
     </Box>
   );

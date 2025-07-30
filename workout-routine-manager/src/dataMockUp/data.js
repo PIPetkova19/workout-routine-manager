@@ -1,65 +1,74 @@
-export const fitnessData = {
-  January: {
+export const fitnessData = [
+  {
     workoutFrequency: 12,
     workoutsThisMonth: 12,
     currentStreak: 5,
     totalVolumeLifted: 18500, // in kg
     activeThisWeek: 3,
+    month: "January"
   },
-  February: {
+  {
     workoutFrequency: 10,
     workoutsThisMonth: 10,
     currentStreak: 4,
     totalVolumeLifted: 16200,
     activeThisWeek: 2,
+    month: "February"
   },
-  March: {
+  {
     workoutFrequency: 14,
     workoutsThisMonth: 14,
     currentStreak: 7,
     totalVolumeLifted: 21000,
     activeThisWeek: 4,
+    month: "March"
   },
-  April: {
+  {
     workoutFrequency: 11,
     workoutsThisMonth: 11,
     currentStreak: 3,
     totalVolumeLifted: 17000,
     activeThisWeek: 2,
+    month: "April"
   },
-  May: {
+  {
     workoutFrequency: 15,
     workoutsThisMonth: 15,
     currentStreak: 8,
     totalVolumeLifted: 22500,
     activeThisWeek: 5,
+    month: "May"
   },
-  June: {
+  {
     workoutFrequency: 13,
     workoutsThisMonth: 13,
     currentStreak: 6,
     totalVolumeLifted: 19500,
     activeThisWeek: 3,
+    month: "June"
   },
-  July: {
+  {
     workoutFrequency: 16,
     workoutsThisMonth: 16,
     currentStreak: 9,
     totalVolumeLifted: 24000,
     activeThisWeek: 6,
+    month: "July"
   },
-  August: {
+  {
     workoutFrequency: 15,
     workoutsThisMonth: 15,
     currentStreak: 10,
     totalVolumeLifted: 22500,
     activeThisWeek: 5,
+    month: "August"
   },
-  September: {
+  {
     workoutFrequency: 14,
     workoutsThisMonth: 14,
     currentStreak: 7,
     totalVolumeLifted: 21000,
     activeThisWeek: 4,
+    month: "September"
   },
-}
+]

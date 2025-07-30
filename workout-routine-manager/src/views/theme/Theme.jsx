@@ -9,6 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import { BarChart } from "@mui/x-charts";
+
 import {
   SpaceDashboardTwoTone,
   FitnessCenterTwoTone,
@@ -32,7 +34,7 @@ export const iconMap = {
 };
 
 export function CreateListItem({ iconName, text }) {
-  const IconComponent = iconMap[iconName]
+  const IconComponent = iconMap[iconName];
 
   return (
     <ListItem>
@@ -54,7 +56,7 @@ export function CreateListItem({ iconName, text }) {
 }
 
 export function BasicButton({ iconName }) {
-  const IconComponent = iconMap[iconName]
+  const IconComponent = iconMap[iconName];
 
   return (
     <Button variant="outlined" sx={{ mr: 2 }}>
@@ -63,16 +65,30 @@ export function BasicButton({ iconName }) {
   );
 }
 
-export function CreateCard({ text, data, width = "100%" }){
+export function CreateCard({ text, data, width = "100%" }) {
   return (
-    <Card >
-      <CardContent >
-        <Typography variant="h6">
-          {text}
-        </Typography>
+    <Card>
+      <CardContent>
+        <Typography variant="h6">{text}</Typography>
+        <Typography variant="h4">{data}</Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function BarsDataset({ data, toShow, keyProp, name = 'This is Chart' }) {
+  return (
+    <Card>
+      <CardContent>
         <Typography variant="h4">
-          {data}
+          {name}
         </Typography>
+        <BarChart
+          dataset={data}
+          xAxis={[{ dataKey: keyProp }]}
+          height="300"
+          series={toShow}
+        />
       </CardContent>
     </Card>
   );
