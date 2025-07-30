@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { use, useState } from 'react';
-import AuthProvider, { AuthContext } from './context/AuthContext';
+import AuthProvider, { AuthContext } from '../context/AuthContext';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
@@ -38,8 +38,9 @@ function SignIn() {
 
     return (
         <Box component="form"
-            onSubmit={handleSubmit} sx={{
-                height: "100vh",
+            onSubmit={handleSubmit} 
+            sx={{
+               height: "90%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -58,16 +59,8 @@ function SignIn() {
                     },
                     minWidth: '200px',
                     maxWidth: '1200px',
-
-                    height: {
-                        xs: '50%',
-                        sm: '50%',
-                        md: '55%',
-                        lg: '55%',
-                        xl: '90%',
-                    },
+        
                     minHeight: '200px',
-                    maxHeight: '1000px',
                     padding: {
                         xs: '30px 16px',
                         sm: '50px 20px',
@@ -82,8 +75,8 @@ function SignIn() {
                         Sign In
                     </Typography>
                 </Box>
-                <Box>
 
+                <Box>
                     <Box>
                         <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
                             Glab to see you again👋
@@ -92,7 +85,6 @@ function SignIn() {
                             Sign in to your account below.
                         </Typography>
                     </Box>
-
                 </Box>
 
                 {/*email and password fields*/}

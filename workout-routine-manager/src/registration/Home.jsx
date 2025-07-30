@@ -1,4 +1,4 @@
-import AuthProvider, { AuthContext } from './context/AuthContext';
+import AuthProvider, { AuthContext } from '../context/AuthContext';
 import { use } from 'react';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';

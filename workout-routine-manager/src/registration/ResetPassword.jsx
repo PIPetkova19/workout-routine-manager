@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
-import { AuthContext } from "./context/AuthContext"
+import { AuthContext } from "../context/AuthContext"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { use, useState } from 'react';

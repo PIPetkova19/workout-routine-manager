@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { use } from 'react';
-import AuthProvider, { AuthContext } from './context/AuthContext';
+import AuthProvider, { AuthContext } from '../context/AuthContext';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
@@ -30,8 +30,6 @@ const validationSchema = yup.object({
         .min(8, 'Password should be of minimum 8 characters length')
         .required('Password is required'),
 });
-
-
 
 const StyledButton = styled(Button)({
     textTransform: "lowercase",
@@ -68,8 +66,9 @@ function SignUp() {
     return (
         <Box
             component="form"
-            onSubmit={formik.handleSubmit} sx={{
-                height: "100vh",
+            onSubmit={formik.handleSubmit} 
+            sx={{
+                height: "90%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -87,7 +86,7 @@ function SignUp() {
                         xl: '35%',
                     },
                     minWidth: '200px',
-                    maxWidth: '900px',
+                    maxWidth: '800px',
 
                     // height: {
                     //     xs: '50%',
@@ -112,8 +111,8 @@ function SignUp() {
                         Sign Up
                     </Typography>
                 </Box>
-                <Box>
 
+                <Box>
                     <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
                         Enter your details below  to create your account.
                     </Typography>
@@ -171,7 +170,6 @@ function SignUp() {
                             }}
                         />
                     </FormControl>
-
                 </Box>
 
                 {/*sign up button*/}
@@ -200,8 +198,6 @@ function SignUp() {
                         <FirstLetter>g</FirstLetter>oogle
                     </StyledButton>
                 </Box>
-
-
 
                 {/*Sign in link*/}
                 <Box>
