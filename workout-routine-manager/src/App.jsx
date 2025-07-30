@@ -4,7 +4,7 @@ import "./App.css";
 import SignUp from "./SignUp"
 import SignIn from "./SignIn"
 import Dashboard from "./views/Dashboardd";
-import Calendar from "./views/Calendar";
+import Calendar from "./views/CalendarPage";
 import Assistant from "./views/Assistant";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Routines from "./views/Routines";
@@ -41,7 +41,7 @@ export default function App() {
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
-
+  const [selected, setSelected] = useState({});
   return (
     <BrowserRouter>
       <Box sx={{ display: "flex" }}>
