@@ -1,98 +1,65 @@
-export const fitnessData = [
-  {
-    month: "January",
+export const fitnessData = {
+  January: {
     workoutFrequency: 12,
     workoutsThisMonth: 12,
     currentStreak: 5,
     totalVolumeLifted: 18500, // in kg
     activeThisWeek: 3,
   },
-  {
-    month: "February",
+  February: {
     workoutFrequency: 10,
     workoutsThisMonth: 10,
     currentStreak: 4,
     totalVolumeLifted: 16200,
     activeThisWeek: 2,
   },
-  {
-    month: "March",
+  March: {
     workoutFrequency: 14,
     workoutsThisMonth: 14,
     currentStreak: 7,
     totalVolumeLifted: 21000,
     activeThisWeek: 4,
   },
-  {
-    month: "April",
+  April: {
     workoutFrequency: 11,
     workoutsThisMonth: 11,
     currentStreak: 3,
     totalVolumeLifted: 17000,
     activeThisWeek: 2,
   },
-  {
-    month: "May",
+  May: {
     workoutFrequency: 15,
     workoutsThisMonth: 15,
     currentStreak: 8,
     totalVolumeLifted: 22500,
     activeThisWeek: 5,
   },
-  {
-    month: "June",
+  June: {
     workoutFrequency: 13,
     workoutsThisMonth: 13,
     currentStreak: 6,
     totalVolumeLifted: 19500,
     activeThisWeek: 3,
   },
-  {
-    month: "July",
+  July: {
     workoutFrequency: 16,
     workoutsThisMonth: 16,
     currentStreak: 9,
     totalVolumeLifted: 24000,
     activeThisWeek: 6,
   },
-  {
-    month: "August",
+  August: {
     workoutFrequency: 15,
     workoutsThisMonth: 15,
     currentStreak: 10,
     totalVolumeLifted: 22500,
     activeThisWeek: 5,
   },
-  {
-    month: "September",
+  September: {
     workoutFrequency: 14,
     workoutsThisMonth: 14,
     currentStreak: 7,
     totalVolumeLifted: 21000,
     activeThisWeek: 4,
   },
-  {
-    month: "October",
-    workoutFrequency: 13,
-    workoutsThisMonth: 13,
-    currentStreak: 6,
-    totalVolumeLifted: 19500,
-    activeThisWeek: 3,
-  },
-  {
-    month: "November",
-    workoutFrequency: 12,
-    workoutsThisMonth: 12,
-    currentStreak: 5,
-    totalVolumeLifted: 18500,
-    activeThisWeek: 2,
-  },
-  {
-    month: "December",
-    workoutFrequency: 10,
-    workoutsThisMonth: 10,
-    currentStreak: 4,
-    totalVolumeLifted: 16200,
-    activeThisWeek: 1,
-  },
-];
+}

@@ -1,14 +1,17 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import AuthProvider from "./context/AuthContext"
 import "./App.css";
-import Dashboard from "./views/dashboard";
-import Calendar from "./views/calendar";
+import SignUp from "./SignUp"
+import SignIn from "./SignIn"
+import Dashboard from "./views/Dashboardd";
+import Calendar from "./views/CalendarPage";
 import Assistant from "./views/Assistant";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Routines from "./views/Routines";
 import AppSettings from "./views/AppSettings";
 import AccSettings from "./views/AccSettings";
+import ResetPassword from "./ResetPassword";
+import UpdateUser from "./UpdateUser";
 import {
   Box,
   CssBaseline,
@@ -38,14 +41,8 @@ export default function App() {
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
-  const routines = [ 
-    { id: 1, name: "Leg Day", exnum: 5, details: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Leg Curls"] },
-    { id: 2, name: "Strength Training", exnum: 4, details: ["Bench Press", "Deadlift", "Pull Ups", "Shoulder Press"] },
-    { id: 3, name: "Cardio", exnum: 3, details: ["Running", "Cycling", "Rowing"] }
-  ]
-
-  const [selected, setSelected] = useState({}) 
-   return (
+  const [selected, setSelected] = useState({});
+  return (
     <BrowserRouter>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -133,6 +130,7 @@ export default function App() {
           }}
         >
           <Toolbar />
+          <AuthProvider>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/routines" element={<Routines />} />
@@ -140,7 +138,12 @@ export default function App() {
             <Route path="/assistant" element={<Assistant />} />
             <Route path="/appsettings" element={<AppSettings />} />
             <Route path="/accsettings" element={<AccSettings />} />
+            <Route path="/signUp" element={<SignUp />} />
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/updateUser" element={<UpdateUser />} />
           </Routes>
+          </AuthProvider>
         </Box>
       </Box>
     </BrowserRouter>
