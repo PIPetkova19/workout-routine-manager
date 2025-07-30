@@ -2,8 +2,8 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import Dashboard from "./views/Dashboardd";
-import Calendar from "./views/Calendar";
+import Dashboard from "./views/dashboard";
+import Calendar from "./views/calendar";
 import Assistant from "./views/Assistant";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Routines from "./views/Routines";
@@ -38,8 +38,14 @@ export default function App() {
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
+  const routines = [ 
+    { id: 1, name: "Leg Day", exnum: 5, details: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Leg Curls"] },
+    { id: 2, name: "Strength Training", exnum: 4, details: ["Bench Press", "Deadlift", "Pull Ups", "Shoulder Press"] },
+    { id: 3, name: "Cardio", exnum: 3, details: ["Running", "Cycling", "Rowing"] }
+  ]
 
-  return (
+  const [selected, setSelected] = useState({}) 
+   return (
     <BrowserRouter>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
