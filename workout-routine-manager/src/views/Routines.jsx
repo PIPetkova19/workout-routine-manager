@@ -1,4 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import CreateRoutines from "../routines/CreateRoutines";
+import RoutinesList from "../routines/RoutinesList";
 
 export default function Routines() {
   return (
@@ -12,10 +14,8 @@ export default function Routines() {
           alignItems: "left",
         }}
       >
-        <Typography variant="h3">Welcome to your Routines!</Typography>
-        <Typography variant="subtitle1">
-          Create and manage your workout plans.
-        </Typography>
+          <CreateRoutines />
+          <RoutinesList />
       </Box>
     </Box>
   );
