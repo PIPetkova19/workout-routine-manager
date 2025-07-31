@@ -27,6 +27,7 @@ import {
 } from "@mui/material";
 
 import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
+import VerifyUser from "./registration/VerifyUser";
 
 const drawerWidth = 220;
 
@@ -129,18 +130,20 @@ export default function App() {
         >
           <Toolbar />
           <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/routines" element={<Routines />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/assistant" element={<Assistant />} />
-            <Route path="/appsettings" element={<AppSettings />} />
-            <Route path="/accsettings" element={<AccSettings />} />
-            <Route path="/signUp" element={<SignUp />} />
-          <Route path="/signIn" element={<SignIn />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/updateUser" element={<UpdateUser />} />
-          </Routes>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/routines" element={<Routines />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/assistant" element={<Assistant />} />
+              <Route path="/appsettings" element={<AppSettings />} />
+              <Route path="/accsettings" element={<AccSettings />} />
+              <Route path="/signUp" element={<SignUp />} />
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
+              <Route path="/updateUser" element={<UpdateUser />} />
+              <Route path="/verifyUser" element={<VerifyUser />} />
+
+            </Routes>
           </AuthProvider>
         </Box>
       </Box>

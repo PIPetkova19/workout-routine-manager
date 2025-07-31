@@ -43,8 +43,7 @@ const FirstLetter = styled('span')({
 
 function SignUp() {
     //use new syntax for useContext
-    const { handleSignUp } = use(AuthContext);
-    const { handleSignUpGoogle } = use(AuthContext);
+    const { handleSignUp,handleSignUpGoogle,handleSignUpWithOtp } = use(AuthContext);
 
     //formik validation
     const formik = useFormik({
@@ -53,8 +52,9 @@ function SignUp() {
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: async (values) => {
+        onSubmit: async (values) => {  
             await handleSignUp(values.email, values.password);
+            await handleSignUpWithOtp(values.email); 
         },
     });
 
