@@ -65,12 +65,13 @@ export function BasicButton({ iconName }) {
   );
 }
 
-export function CreateCard({ text, data, width = "100%" }) {
+export function CreateCard({ text, data, subText="", width = "100%" }) {
   return (
     <Card>
       <CardContent>
         <Typography variant="h6">{text}</Typography>
         <Typography variant="h4">{data}</Typography>
+        <Typography variant="body2">{subText}</Typography>
       </CardContent>
     </Card>
   );
