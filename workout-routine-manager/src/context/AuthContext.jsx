@@ -34,9 +34,9 @@ function AuthProvider({ children }) {
             if (error) { throw error; }
             setUser(data?.user);
 
-            alert("Sign up successful");
+            //alert("Sign up successful");
             //navigate to home page
-            navigate("/");
+            // navigate("/");
         }
         catch (error) {
             console.error(error);
@@ -101,10 +101,11 @@ function AuthProvider({ children }) {
         try {
             const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
                 //link to update user page
-                redirectTo: 'http://localhost:5174/updateUser',
+                redirectTo: 'http://localhost:5173/updateUser',
             })
-            alert("Email sent!");
+
             if (error) { throw error; }
+            alert("Email sent!");
         }
 
         catch (error) {
@@ -116,7 +117,7 @@ function AuthProvider({ children }) {
     //update user pass
     const handleUserUpdate = async (password) => {
         try {
-            const { data, error } = await supabase.auth.updateUser({password });
+            const { data, error } = await supabase.auth.updateUser({ password });
             if (error) { throw error; }
             alert("User update successfully!");
             setUser(data?.user);
@@ -130,9 +131,48 @@ function AuthProvider({ children }) {
         }
     }
 
+    //sign up otp
+    const handleSignUpWithOtp = async (email) => {
+        try {
+            const { data, error } = await supabase.auth.signInWithOtp({
+                email,
+                options: {
+                    shouldCreateUser: false,
+                }
+            });
+
+            if (error) { throw error; }
+            alert("Email sent");
+            navigate("/verifyUser");
+        }
+
+        catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    };
+
+    //verify otp
+    const handleVerifyOtp = async (email, token) => {
+        try {
+            const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
+            if (error) { throw error; }
+            alert("Verification successful");
+            navigate("/");
+        }
+
+        catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    };
+
     return (
-        <AuthContext value={{ user, handleSignIn, handleSignOut, handleSignUp,
-         handleSignUpGoogle, handleForgottenPassword, handleUserUpdate}}>
+        <AuthContext value={{
+            user, handleSignIn, handleSignOut, handleSignUp,
+            handleSignUpGoogle, handleForgottenPassword, handleUserUpdate,
+            handleSignUpWithOtp, handleVerifyOtp
+        }}>
             {children}
         </AuthContext>
     );
