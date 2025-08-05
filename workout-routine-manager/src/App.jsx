@@ -32,6 +32,7 @@ import {
 
 import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
 import VerifyUser from "./registration/VerifyUser";
+import GoogleCalendar from "./GoogleCalendar";
 
 const drawerWidth = 220;
 
@@ -104,7 +105,7 @@ export default function App() {
 
             {/*sign out*/}
             <Box sx={{ marginLeft: "auto" }}>
-              <Button 
+              <Button
                 variant="outlined"
                 onClick={signOut}
                 startIcon={<LogoutIcon />}
@@ -192,7 +193,6 @@ export default function App() {
           <Route path="/updateUser" element={<UpdateUser />} />
           <Route path="/verifyUser" element={<VerifyUser />} />
 
-
           {/*with registration*/}
           <Route path="/routines" element={
             <ProtectedRoute>
@@ -203,6 +203,12 @@ export default function App() {
           <Route path="/calendar" element={
             <ProtectedRoute>
               <Calendar />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/googleCalendar" element={
+            <ProtectedRoute>
+              <GoogleCalendar />
             </ProtectedRoute>
           } />
 
