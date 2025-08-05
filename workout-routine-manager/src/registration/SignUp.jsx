@@ -79,11 +79,11 @@ function SignUp() {
                 spacing={3}
                 sx={{
                     width: {
-                        xs: '90%',
-                        sm: '70%',
-                        md: '60%',
-                        lg: '50%',
-                        xl: '35%',
+                       xs: '60%',
+                        sm: '50%',
+                        md: '40%',
+                        lg: '30%',
+                        xl: '25%',
                     },
                     minWidth: '200px',
                     maxWidth: '800px',
