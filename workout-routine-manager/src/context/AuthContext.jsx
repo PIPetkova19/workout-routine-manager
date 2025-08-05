@@ -103,8 +103,6 @@ function AuthProvider({ children }) {
             if (error) { throw error; }
 
             setUser(data?.user);
-            //navigate to home
-            navigate("/");
         }
         catch (error) {
             console.error(error);
