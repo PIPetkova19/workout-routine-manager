@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import HttpsIcon from '@mui/icons-material/Https';
+import { useTheme, useMediaQuery } from "@mui/material";
 
 /*CREATE A NEW ACCOUNT*/
 
@@ -42,8 +43,12 @@ const FirstLetter = styled('span')({
 });
 
 function SignUp() {
+    //when small screen show only google logo w/o text
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
     //use new syntax for useContext
-    const { handleSignUp,handleSignUpGoogle,handleSignUpWithOtp } = use(AuthContext);
+    const { handleSignUp, handleSignUpGoogle, handleSignUpWithOtp } = use(AuthContext);
 
     //formik validation
     const formik = useFormik({
@@ -52,9 +57,9 @@ function SignUp() {
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: async (values) => {  
+        onSubmit: async (values) => {
             await handleSignUp(values.email, values.password);
-            await handleSignUpWithOtp(values.email); 
+            await handleSignUpWithOtp(values.email);
         },
     });
 
@@ -66,7 +71,7 @@ function SignUp() {
     return (
         <Box
             component="form"
-            onSubmit={formik.handleSubmit} 
+            onSubmit={formik.handleSubmit}
             sx={{
                 height: "90%",
                 display: "flex",
@@ -79,7 +84,7 @@ function SignUp() {
                 spacing={3}
                 sx={{
                     width: {
-                       xs: '60%',
+                        xs: '60%',
                         sm: '50%',
                         md: '40%',
                         lg: '30%',
@@ -194,8 +199,12 @@ function SignUp() {
                         onClick={signUpGoogle}
                         startIcon={<GoogleIcon />}
                         sx={{ fontWeight: "bold" }}>
-                        <FirstLetter>S</FirstLetter>ign up with
-                        <FirstLetter>g</FirstLetter>oogle
+                        {!isSmallScreen && (
+                            <>
+                                <FirstLetter>S</FirstLetter>ign up with
+                                <FirstLetter>g</FirstLetter>oogle
+                            </>
+                        )}
                     </StyledButton>
                 </Box>
 
