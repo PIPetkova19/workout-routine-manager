@@ -48,7 +48,7 @@ function SignUp() {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     //use new syntax for useContext
-    const { handleSignUp, handleSignUpGoogle, handleSignUpWithOtp } = use(AuthContext);
+    const { handleSignUp, handleSignUpGoogle } = use(AuthContext);
 
     //formik validation
     const formik = useFormik({
@@ -59,7 +59,6 @@ function SignUp() {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             await handleSignUp(values.email, values.password);
-            await handleSignUpWithOtp(values.email);
         },
     });
 
