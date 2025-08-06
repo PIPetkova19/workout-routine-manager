@@ -67,7 +67,7 @@ export function BasicButton({ iconName }) {
 
 export function CreateCard({ text, data, subText="", width = "100%" }) {
   return (
-    <Card>
+    <Card sx={{ height: "95%" }}>
       <CardContent>
         <Typography variant="h6">{text}</Typography>
         <Typography variant="h4">{data}</Typography>
@@ -87,7 +87,7 @@ export function BarsDataset({ data, toShow, keyProp, name = 'This is Chart' }) {
         <BarChart
           dataset={data}
           xAxis={[{ dataKey: keyProp }]}
-          height="300"
+          height="250"
           series={toShow}
         />
       </CardContent>
