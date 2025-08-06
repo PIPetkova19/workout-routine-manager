@@ -5,8 +5,12 @@ import {
   ListItemText,
   Button,
   Card,
+<<<<<<< Updated upstream
   CardContent,
   Typography,
+=======
+  useTheme,
+>>>>>>> Stashed changes
 } from "@mui/material";
 
 import {
@@ -33,21 +37,26 @@ export const iconMap = {
 
 export function CreateListItem({ iconName, text }) {
   const IconComponent = iconMap[iconName]
+  const theme = useTheme();
 
   return (
     <ListItem>
       <ListItemButton
         sx={{
           border: "3px solid",
-          borderColor: "#1976d2",
+          borderColor: theme.palette.primary.main,
           borderRadius: 3,
           boxShadow: 3,
+          backgroundColor: theme.palette.background.paper,
+          '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+          },
         }}
       >
         <ListItemIcon sx={{ minWidth: 32, mr: 1 }}>
           <IconComponent color="primary" />
         </ListItemIcon>
-        <ListItemText sx={{ ml: 1, color: "#1976d2" }}>{text}</ListItemText>
+        <ListItemText sx={{ ml: 1, color: theme.palette.primary.main }}>{text}</ListItemText>
       </ListItemButton>
     </ListItem>
   );
@@ -55,9 +64,21 @@ export function CreateListItem({ iconName, text }) {
 
 export function BasicButton({ iconName }) {
   const IconComponent = iconMap[iconName]
+  const theme = useTheme();
 
   return (
-    <Button variant="outlined" sx={{ mr: 2 }}>
+    <Button 
+      variant="outlined" 
+      sx={{ 
+        mr: 2,
+        borderColor: theme.palette.primary.main,
+        color: theme.palette.primary.main,
+        '&:hover': {
+          borderColor: theme.palette.primary.dark,
+          backgroundColor: theme.palette.action.hover,
+        },
+      }}
+    >
       <IconComponent />
     </Button>
   );

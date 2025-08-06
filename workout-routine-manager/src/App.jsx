@@ -27,7 +27,11 @@ import {
 } from "@mui/material";
 
 import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
+<<<<<<< Updated upstream
 import VerifyUser from "./registration/VerifyUser";
+=======
+import ThemeToggle from "./components/ThemeToggle";
+>>>>>>> Stashed changes
 
 const drawerWidth = 220;
 
@@ -53,29 +57,28 @@ export default function App() {
         >
           <Toolbar
             sx={{
-              displex: "flex",
-              justifyContent: "center",
-              postion: "relative",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              position: "relative",
             }}
           >
-            {isMobile && (
-              <IconButton
-                color="inherit"
-                onClick={() => setDrawerOpen((prev) => !prev)}
-                sx={{
-                  position: "absolute",
-                  left: 0,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
-            <FitBitIcon />
-            <Typography variant="h6" noWrap component="div">
-              Fitness Tracker
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {isMobile && (
+                <IconButton
+                  color="inherit"
+                  onClick={() => setDrawerOpen((prev) => !prev)}
+                  sx={{ mr: 2 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
+              <FitBitIcon />
+              <Typography variant="h6" noWrap component="div" sx={{ ml: 1 }}>
+                Fitness Tracker
+              </Typography>
+            </Box>
+            <ThemeToggle />
           </Toolbar>
         </AppBar>
         <Drawer
@@ -124,8 +127,14 @@ export default function App() {
           component="main"
           sx={{
             p: 3,
+<<<<<<< Updated upstream
             width: "100%",
             backgroundColor: "#F0F0F0",
+=======
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: theme.palette.background.default,
+>>>>>>> Stashed changes
           }}
         >
           <Toolbar />
