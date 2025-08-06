@@ -18,6 +18,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import HttpsIcon from '@mui/icons-material/Https';
 
 /*CREATE A NEW ACCOUNT*/
+var _s = $RefreshSig$();
 
 //validation with yup
 const validationSchema = yup.object({
