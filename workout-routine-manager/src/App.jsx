@@ -27,11 +27,8 @@ import {
 } from "@mui/material";
 
 import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
-<<<<<<< Updated upstream
 import VerifyUser from "./registration/VerifyUser";
-=======
 import ThemeToggle from "./components/ThemeToggle";
->>>>>>> Stashed changes
 
 const drawerWidth = 220;
 
@@ -127,14 +124,9 @@ export default function App() {
           component="main"
           sx={{
             p: 3,
-<<<<<<< Updated upstream
-            width: "100%",
-            backgroundColor: "#F0F0F0",
-=======
             width: "100vw",
             height: "100vh",
             backgroundColor: theme.palette.background.default,
->>>>>>> Stashed changes
           }}
         >
           <Toolbar />

@@ -5,12 +5,7 @@ import {
   ListItemText,
   Button,
   Card,
-<<<<<<< Updated upstream
-  CardContent,
-  Typography,
-=======
   useTheme,
->>>>>>> Stashed changes
 } from "@mui/material";
 
 import {
