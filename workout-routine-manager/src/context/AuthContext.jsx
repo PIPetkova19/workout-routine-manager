@@ -18,12 +18,12 @@ function AuthProvider({ children }) {
         };
         getSession();
 
-       /* //event listener that listens for changes in user
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-            //if there is a change -> update user
-            setUser(session?.user ?? null);
-        });
-        //return () => listener.subscription.unsubscribe();*/
+        /* //event listener that listens for changes in user
+         const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+             //if there is a change -> update user
+             setUser(session?.user ?? null);
+         });
+         //return () => listener.subscription.unsubscribe();*/
     }, []);
 
     //sign up otp
@@ -98,7 +98,10 @@ function AuthProvider({ children }) {
     const handleSignUpGoogle = async () => {
         try {
             const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: 'google'
+                provider: 'google',
+                options: {
+                    scopes: 'https://www.googleapis.com/auth/calendar'
+                }
             })
             if (error) { throw error; }
 

@@ -151,12 +151,19 @@ export default function App() {
               <Link to={"/routines"}>
                 <CreateListItem iconName="Routines" text="Routines" />
               </Link>
-              <Link to={"/calendar"}>
-                <CreateListItem iconName="Calendar" text="Calendar" />
-              </Link>
+
               <Link to={"/assistant"}>
                 <CreateListItem iconName="Assistant" text="AI Assistant" />
               </Link>
+              {user.user_metadata.iss === "https://accounts.google.com" ?
+                (<Link to={"/googleCalendar"}>
+                  <CreateListItem iconName="Calendar" text="Google Calendar" />
+                </Link>
+                ) :
+                 (<Link to={"/calendar"}>
+                  <CreateListItem iconName="Calendar" text="Calendar" />
+                </Link>)
+                }
             </List>
           </Box>
           <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
