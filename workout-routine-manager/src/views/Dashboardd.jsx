@@ -1,8 +1,7 @@
 import { Box, Typography, Grid } from "@mui/material";
 import { BarsDataset, CreateCard } from "./theme/Theme";
 import { fitnessData } from "../dataMockUp/data";
-import { streaks } from "../utilities/helperFunctions";
-import { GetCalendar } from "../utilities/data";
+import { GetFromCalendar } from "../utilities/data";
 
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
@@ -10,10 +9,10 @@ let currentYear = new Date().getFullYear();
 const dataToShow = [
   { dataKey: "workoutFrequency", label: "workoutFrequency", color: "#1976d2" },
 ];
-const streakSubtext = streaks(fitnessData[currentYear][currentMonth].currentStreak);
 
 export default function Dashboard() {
-  let calendar = GetCalendar();
+  let getWorkoutCount = GetFromCalendar("workoutCount");
+  let getCurrentStreak = GetFromCalendar("currentStreak")
   return (
     <Box>
       <Box
@@ -33,14 +32,10 @@ export default function Dashboard() {
       <Box>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 3 }}>
-            {calendar}
+            {getWorkoutCount}
           </Grid>
           <Grid size={{ xs: 12, md: 3 }}>
-            <CreateCard
-              text={"Current Streak"}
-              data={`${fitnessData[currentYear][currentMonth].currentStreak} days`}
-              subText={streakSubtext}
-            />
+            {getCurrentStreak}
           </Grid>
           <Grid size={{ xs: 12, md: 3 }}>
             <CreateCard

@@ -58,16 +58,48 @@ export function calculateDifference(data, currentAmount, currentYear, currentMon
   }
 }
 
-export function streaks(data){
-    if(data === 0){
+export function calculateStreak(data, currentMonth, currentYear, currentDay){
+  let helpArray = [];
+
+  data.forEach(element => {
+    const year = new Date(element.date).getFullYear();
+    const month = new Date(element.date).getMonth();
+    const day = new Date(element.date).getDate();
+
+    if(year === currentYear && month === currentMonth){
+      helpArray.push(day);
+    }
+  });
+
+  console.log(helpArray);
+  
+  helpArray.sort((a, b) => a - b);
+
+  if (!helpArray.includes(currentDay)) {
+    return 0;
+  }
+
+  let streak = 1;
+  let day = currentDay - 1;
+
+  while (helpArray.includes(day)) {
+    streak++;
+    day--;
+  }
+
+  return streak;
+}
+
+export function streakSubtext(count){
+    if(count === 0){
         return "C'mon you can do this!";
-    } else if (data > 0 && data <= 3){
+    } else if (count > 0 && count <= 3){
         return "Keep it up!";
-    } else if (data > 3 && data <= 6){
+    } else if (count > 3 && count <= 6){
         return "You're doing great!";
-    } else if (data > 6 && data <= 9) {
+    } else if (count > 6 && count <= 9) {
         return "You're killing it!"
-    } else if (data > 9){
+    } else if (count > 9){
         return "YOU'RE ON FIIIRE!"
     }
 }
