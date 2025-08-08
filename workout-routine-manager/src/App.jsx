@@ -12,6 +12,8 @@ import AppSettings from "./views/AppSettings";
 import AccSettings from "./views/AccSettings";
 import ResetPassword from "./ResetPassword";
 import UpdateUser from "./UpdateUser";
+import GoogleCalendar from "./views/GoogleCalendar";
+
 import {
   Box,
   CssBaseline,
@@ -105,6 +107,9 @@ export default function App() {
               <Link to={"/assistant"}>
                 <CreateListItem iconName="Assistant" text="AI Assistant" />
               </Link>
+              <Link to={"/googlecalendar"}>
+                <CreateListItem iconName="Assistant" text="Google Calendar" />
+              </Link>
             </List>
           </Box>
           <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
@@ -136,6 +141,7 @@ export default function App() {
             <Route path="/routines" element={<Routines />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/assistant" element={<Assistant />} />
+            <Route path="/googlecalendar" element={<GoogleCalendar />} />
             <Route path="/appsettings" element={<AppSettings />} />
             <Route path="/accsettings" element={<AccSettings />} />
             <Route path="/signUp" element={<SignUp />} />
