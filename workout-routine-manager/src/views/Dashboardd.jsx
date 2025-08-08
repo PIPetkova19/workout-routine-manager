@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { CreateCard } from "./theme/Theme";
 import { fitnessData } from "../dataMockUp/data";
-import { Link } from 'react-router-dom';
 import { AuthContext } from "../context/AuthContext";
 import { use } from 'react';
+import IntroPage from "../IntroPage";
 
 export default function Dashboard() {
   const { user } = use(AuthContext);
@@ -38,17 +38,7 @@ export default function Dashboard() {
       :
       <>
           {/*if user is logged out*/}
-        <Box>
-          <Link to="/signIn" style={{ fontWeight: "bold", textDecoration: "none" }}>
-            Sign in
-          </Link>
-        </Box>
-
-        <Box>
-          <Link to="/signUp" style={{ fontWeight: "bold", textDecoration: "none" }}>
-            Sign up
-          </Link>
-        </Box>
+       <IntroPage/>
       </>
   );
 }

@@ -33,6 +33,7 @@ import {
 import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
 import VerifyUser from "./registration/VerifyUser";
 import GoogleCalendar from "./GoogleCalendar";
+import IntroPage from "./IntroPage";
 
 const drawerWidth = 220;
 
@@ -194,6 +195,8 @@ export default function App() {
         <Routes>
           {/*without registration*/}
           <Route path="/" element={<Dashboard />} />
+                    <Route path="/introPage" element={<IntroPage />} />
+
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
