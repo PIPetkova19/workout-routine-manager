@@ -6,7 +6,9 @@ import { supabase } from '../supabase/supabase-client';
 import _pick from 'lodash/pick';
 import PropTypes from 'prop-types';
 import { set } from "lodash";
-
+import Typography from '@mui/material/Typography';
+import CheckIcon from '@mui/icons-material/Check';
+import Box from '@mui/material/Box';
 // import ClearIcon  from "@mui/icons-material/Clear";
 // import IconButton from "@mui/material/IconButton";
 // import ImputAdornment from "@mui/material/InputAdornment";
@@ -38,6 +40,10 @@ export default function CalendarPage() {
   const [userId, setUserId] = useState('');
   const [userLoginOpen, setUserLoginOpen] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [routineColors, setRoutineColors] = useState({});
+  const [colorDialogOpen, setColorDialogOpen] = useState(false);
+  const [selectedRoutineForColor, setSelectedRoutineForColor] = useState('');
 
   useEffect(() => {
     const fetchCalendarData = async () => {
@@ -80,6 +86,20 @@ export default function CalendarPage() {
           console.error('Error fetching routines:', routinesError);
           return;
         }
+
+        const {data: routineColors, error: colorsError} = await supabase
+          .from('routine_colors')
+          .select('*')
+          .eq('user_id', userIdInt);
+
+          if(!colorsError && routineColors) {
+            const colorsMap = {};
+            routineColors.forEach(item => {
+              colorsMap[item.routine_id] = item.color;
+            });
+            setRoutineColors(colorsMap);
+          }
+
         if(calendarData.length > 0 && calendarData) {
           // console.log(`Fetched ${calendarData.length} dates from Supabase:`, calendarData);
           setCalendarDates([...new Set(calendarData.map(item => item.calendar.date))]);
@@ -127,15 +147,24 @@ export default function CalendarPage() {
   const handleDayClick = (newValue) => {
     const oldDay = value.getDate(), oldMonth = value.getMonth(), oldYear = value.getFullYear();
     const newDay = newValue.getDate(), newMonth = newValue.getMonth(), newYear = newValue.getFullYear();
-    //const isSameDay = oldDay === newDay && oldMonth === newMonth && oldYear === newYear;
+    const isSameDay = oldDay === newDay && oldMonth === newMonth && oldYear === newYear;
 
-    if (!(oldDay === newDay && oldMonth === newMonth && oldYear === newYear)) {
+    if (!isSameDay) {
       setValue(newValue);
     }
     if (newValue.getDate() !== value.getDate()) {
-      setBackupRoutineId(selected[getDateKey(newValue)] || '');
+      const currentRoutineId = selected[getDateKey(newValue)] || '';
+      setRoutineId(currentRoutineId);
+      setBackupRoutineId(currentRoutineId);
       setDialogOpen(true);
     }
+
+  //    setValue(newValue);
+
+  // const currentRoutineId = selected[getDateKey(newValue)] || '';
+  // setRoutineId(currentRoutineId);
+  // setBackupRoutineId(currentRoutineId);
+  // setDialogOpen(true);
   };
 
   const handleMouseOver = useCallback((event, value) => {
@@ -159,18 +188,18 @@ export default function CalendarPage() {
 
   useEffect(() => {
     const selectedRoutineId = selected[getDateKey(value)] || '';
-    setRoutineId(selectedRoutineId);
-    setBackupRoutineId(selectedRoutineId);
+    // setRoutineId(selectedRoutineId);
+    // setBackupRoutineId(selectedRoutineId);
   }, [value, selected]);
 
-  const handleRoutineChange = (e) => {
-    setRoutineId(e.target.value);
-    setSelected(prev => ({ ...prev, [getDateKey(value)]: e.target.value }));
-  };
+const handleRoutineChange = (e) => {
+  console.log('Routine changed to:', e.target.value);
+  setRoutineId(e.target.value);
+};
 
   const handleCancel = () => {
     setRoutineId(backupRoutineId);
-    setSelected(prev => ({ ...prev, [getDateKey(value)]: backupRoutineId }));
+    //setSelected(prev => ({ ...prev, [getDateKey(value)]: backupRoutineId }));
     setDialogOpen(false);
   };
 
@@ -181,38 +210,73 @@ export default function CalendarPage() {
   const refreshCalendarData = async () => {
     try {
       const userIdInt = parseInt(userId);
-      const { data: calendarData, error: calendarError} = await supabase
-        .from('_routine_date')
-        .select('date_id, routine_id, user_id, calendar!inner(id, date), exercise!inner(id, routineName, exercise)')
+      console.log('Refreshing calendar data for user:', userIdInt);
+      
+      const { data: calendarData, error: calendarError } = await supabase
+        .from('routine_date')
+        .select(`
+          date_id,
+          routine_id,
+          user_id,
+          calendar!inner (
+            id,
+            date
+          ),
+          routines!inner (
+            id,
+            routineName,
+            exercise
+          )
+        `)
         .eq('user_id', userIdInt);
 
       if (calendarError) {
         console.error('Error fetching calendar data:', calendarError);
         return;
       }
-      if(calendarData && calendarData.length > 0) {
-        console.log(`Fetched ${calendarData.length} calendar entries from Supabase:`, calendarData);
+
+      const { data: routineColorsData, error: colorsError } = await supabase
+      .from('routine_colors')
+      .select('*')
+      .eq('user_id', userIdInt);
+
+    if (!colorsError && routineColorsData) {
+      const colorsMap = {};
+      routineColorsData.forEach(item => {
+        colorsMap[item.routine_id] = item.color;
+      });
+      setRoutineColors(colorsMap);
+      console.log('Updated routine colors:', colorsMap);
+    }
+
+      if (calendarData && calendarData.length > 0) {
+        console.log('Fetched calendar data:', calendarData);
         setCalendarDates([...new Set(calendarData.map(item => item.calendar.date))]);
+        
         const selectedRoutines = {};
         calendarData.forEach(item => {
           selectedRoutines[item.calendar.date] = item.routines.id;
-          });
-          setSelected(selectedRoutines);
-      }  else {
-          setCalendarDates([]);
-          setSelected({});
-          console.log('No calendar data found for the user.');
-        }
-       } catch (error) {
-        console.error('Error:', error);
+        });
+        setSelected(selectedRoutines);
+      } else {
+        setCalendarDates([]);
+        setSelected({});
+        console.log('No calendar data found');
       }
-    };
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    }
+  };
 
 
   const handleSaveData = async () => {
-    //const key = getDateKey(value);
-    const selectedRoutineId = routineId;
+    const selectedRoutineId = routineId && routineId !== '' ? parseInt(routineId) : null;
     const userIdInt = parseInt(userId);
+
+    console.log('=== SAVE ROUTINE START ===');
+    console.log('Date:', getDateKey(value));
+    console.log('Routine ID:', selectedRoutineId);
+    console.log('User ID:', userIdInt);
 
     if (!userIdInt) {
       console.warn('No user ID provided!!!');
@@ -220,135 +284,136 @@ export default function CalendarPage() {
       return;
     }
 
-    if(!getDateKey(value)) {
+    if (!getDateKey(value)) {
       console.warn('No date key found!!!');
       setDialogOpen(false);
       return;
     }
 
-    try{
-      if(!selectedRoutineId) {
-        console.warn('No routine selected!!!');
-        await handleRemoveRoutine();
+    try {
+      if (!selectedRoutineId || selectedRoutineId === '' || isNaN(selectedRoutineId)) {
+        console.warn('No routine selected - removing existing entry');
+        await handleRemoveData();
         return;
       }
+      console.log('Step 1: Checking calendar entry...');
       const { data: existingCalendar, error: checkError } = await supabase
         .from('calendar')
         .select('id')
         .eq('date', getDateKey(value))
-        .single();
+        .maybeSingle(); 
 
-      if (checkError) {
+      let calendarId;
+
+      if (checkError && checkError.code !== 'PGRST116') {
         console.error('Error checking existing calendar entry:', checkError);
         return;
       }
 
       if (existingCalendar) {
-      let calendarId = existingCalendar.id;
-        console.log('Step 2: Using existing calendar ID:', calendarId);
+        calendarId = existingCalendar.id;
+        console.log('Using existing calendar ID:', calendarId);
       } else {
-        console.log('Step 2: Creating new calendar entry...');
+        console.log('Creating new calendar entry...');
         const { data: newCalendar, error: calendarError } = await supabase
           .from('calendar')
           .insert([{ date: getDateKey(value) }])
           .select()
           .single();
 
-        console.log('New calendar result:', newCalendar);
-        console.log('New calendar error:', calendarError);
         if (calendarError) {
-          console.error('Error creating new calendar entry:', insertError);
+          console.error('Error creating new calendar entry:', calendarError);
           return;
         }
+        
         if (!newCalendar) {
           console.error('No calendar data returned after insert');
           return;
-        } calendarId = newCalendar.id;
-        if(!calendarId) {
-          console.warn('No calendar ID found!!!');
-          return;
         }
+        
+        calendarId = newCalendar.id;
+        console.log('Created new calendar ID:', calendarId);
+      }
 
-         // Давайте попробуем более простой запрос сначала
-      console.log('Trying to fetch all routine_date records first...');
-      const { data: allRoutineDates, error: allRoutineDatesError } = await supabase
+      if (!calendarId) {
+        console.warn('No calendar ID found!!!');
+        return;
+      }
+
+      console.log('Step 2: Checking routine_date entry...');
+      const { data: existingRoutineDate, error: routineDateError } = await supabase
         .from('routine_date')
         .select('*')
-        .limit(5);
+        .eq('date_id', calendarId)
+        .eq('user_id', userIdInt)
+        .maybeSingle(); 
 
-      console.log('All routine_date records (first 5):', allRoutineDates);
-      console.log('All routine_date error:', allRoutineDatesError);
-
-      // // Теперь попробуем найти запись с правильными полями
-      // // Используем названия полей из вашей БД (из первого скриншота видно date_id, user_id, routine_id)
-      // const { data: existingRoutineDate, error: routineDateCheckError } = await supabase
-      //   .from('routine_date')
-      //   .select('*') // Получаем все поля чтобы увидеть структуру
-      //   .eq('date_id', calendarId)
-      //   .eq('user_id', userIdInt);
-
-      // console.log('Routine_date check result:', existingRoutineDate);
-      // console.log('Routine_date check error:', routineDateCheckError);
-
-      // if (routineDateCheckError) {
-      //   console.error('Error checking existing routine_date:', routineDateCheckError);
-      //   console.error('Error details:', JSON.stringify(routineDateCheckError, null, 2));
-      //   return;
-      // }
-
-      // Теперь попробуем создать новую запись в routine_date
-      const { data: updateResult, error: updateError } = await supabase
-        .from('routine_date')
-        .update({
-            routine_id: selectedRoutineId,
-          })
-          .eq('date_id', calendarId)
-          .eq('user_id', userIdInt)
-          .select();
-
-      if (updateError) {
-        console.error('Error updating routine_date entry:', updateError);
+      if (routineDateError && routineDateError.code !== 'PGRST116') {
+        console.error('Error checking routine_date:', routineDateError);
         return;
+      }
+
+      if (existingRoutineDate) {
+        console.log('Updating existing routine_date...');
+        const { error: updateError } = await supabase
+          .from('routine_date')
+          .update({ routine_id: selectedRoutineId })
+          .eq('date_id', calendarId)
+          .eq('user_id', userIdInt);
+
+        if (updateError) {
+          console.error('Error updating routine_date entry:', updateError);
+          return;
+        }
+        
+        console.log('Routine_date entry updated successfully');
       } else {
-        console.log('Routine_date entry updated successfully:', updateResult);
+        console.log('Creating new routine_date entry...');
         const insertData = {
           date_id: calendarId,
           user_id: userIdInt,
           routine_id: selectedRoutineId
         };
-        if(!insertData.date_id || !insertData.user_id || !insertData.routine_id) {
+
+        if (!insertData.date_id || !insertData.user_id || !insertData.routine_id) {
           console.warn('Missing required fields in insertData:', insertData);
           return;
         }
+
         const { data: insertResult, error: insertError } = await supabase
           .from('routine_date')
           .insert([insertData])
-          .select()
-          .single();
+          .select();
 
         if (insertError) {
           console.error('Error creating new routine_date entry:', insertError);
           return;
-        } if (!insertResult) {
+        }
+        
+        if (!insertResult || insertResult.length === 0) {
           console.error('No routine_date data returned after insert');
           return;
         }
-        console.log('New routine_date entry created successfully:', insertResult);
+        
+        console.log('New routine_date entry created successfully:', insertResult[0]);
       }
-    }
-    await refreshCalendarData();
-    setDialogOpen(false);
+      setSelected(prev => ({ ...prev, [getDateKey(value)]: selectedRoutineId }));
+
+      await refreshCalendarData();
+      setDialogOpen(false);
+      console.log('=== SAVE ROUTINE COMPLETED ===');
+
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error in handleSaveData:', error);
     }
-  }
+  };
 
 
+  //remove routine
   //remove routine 
   //---------------------------------------------------------------
 
   const handleRemoveData = async () => {
-    //const selectedRoutineId = selected[getDateKey(value)];
     const userIdInt = parseInt(userId);
 
     try {
@@ -356,15 +421,27 @@ export default function CalendarPage() {
         .from('calendar')
         .select('id')
         .eq('date', getDateKey(value))
-        .single();
+        .maybeSingle();
 
       if (calendarError) {
-        console.error('Error removing routine:', calendarError);
+        console.error('Error finding calendar entry:', calendarError);
         setDialogOpen(false);
         return;
       }
+
+       if (!calendarData) {
+      console.log('No calendar entry found to remove');
+      setSelected(prev => {
+        const newSelected = { ...prev };
+        delete newSelected[getDateKey(value)];
+        return newSelected;
+      });
+      setDialogOpen(false);
+      return;
+    }
       console.log('Found calendar entry:', calendarData);
-      const {error: deleteError} = await supabase
+
+      const { error: deleteError } = await supabase
         .from('routine_date')
         .delete()
         .eq('date_id', calendarData.id)
@@ -376,38 +453,112 @@ export default function CalendarPage() {
         return;
       }
 
-      console.log('Routine removed successfully:', calendarData);
-      const {data: checking, error: checkError} = await supabase
-        .from('routine_date')
-        .select('id')
-        .eq('date_id', calendarEntry.id);
+      console.log('Routine removed successfully');
+    const { data: remainingEntries } = await supabase
+      .from('routine_date')
+      .select('*')
+      .eq('date_id', calendarData.id);
 
-      if (checkError) {
-        console.log('Error checking routine data:', checkError);
+    if (!remainingEntries || remainingEntries.length === 0) {
+      await supabase
+        .from('calendar')
+        .delete()
+        .eq('id', calendarData.id);
+    }
+    setSelected(prev => {
+      const newSelected = { ...prev };
+      delete newSelected[getDateKey(value)];
+      return newSelected;
+    });
+
+    await refreshCalendarData();
+    setRoutineId('');
+    setDialogOpen(false);
+    console.log('Routine removed successfully');
+
+  } catch (error) {
+    console.error('Error in handleRemoveData:', error);
+  }
+};
+
+//--------------------------------------------------------------------
+//routine colors
+//--------------------------------------------------------------------
+
+const ROUTINE_COLORS = [
+  { value: '#f44336', name: 'Red' },
+  { value: '#9c27b0', name: 'Purple' },
+  { value: '#3f51b5', name: 'Indigo' },
+  { value: '#2196f3', name: 'Blue' },
+  { value: '#4caf50', name: 'Green' },
+  { value: '#8bc34a', name: 'Light Green' },
+  { value: '#ffeb3b', name: 'Yellow' },
+  { value: '#ff9800', name: 'Orange' },
+];
+
+const getColorByName = (colorName) => {
+  const colorObj = ROUTINE_COLORS.find(color => color.name === colorName);
+  return colorObj ? colorObj.value : '#2196f3'; 
+};
+
+const handleColorEdit = (routine) => {
+  setSelectedRoutineForColor(routine);
+  setColorDialogOpen(true);
+};
+
+const handleColorSave = async(color) => {
+  if(!selectedRoutineForColor) return;
+  const userIdInt = parseInt(userId);
+
+  try {
+    const {data: existing, error: checkError } =await supabase
+    .from('routine_colors').select('*').eq('routine_id', selectedRoutineForColor.id)
+    .eq('user_id', userIdInt)
+    .maybeSingle();
+
+    if(checkError) {
+      console.error('Error checking existing color: ', checkError);
+      return;
+    }
+
+    if (existing) {
+       const {error: updateError} = await supabase
+    .from('routine_colors')
+    .update({color: color})
+    .eq('routine_id', selectedRoutineForColor.id)
+    .eq('user_id', userIdInt);
+
+    if(updateError) {
+      console.error('Error updating color: ', updateError);
+      return;
+    }
+    } else {
+      const {error: insertError} = await supabase
+      .from('routine_colors')
+      .insert([{
+        routine_id: selectedRoutineForColor.id,
+        user_id: userIdInt, 
+        color: color
+      }]);
+
+      if(insertError) {
+        console.error('Error inserting color: ', insertError);
         return;
-      } 
-
-      if(checking.length === 0) {
-        const { error: deleteError } = await supabase
-          .from('calendar')
-          .delete()
-          .eq('id', calendarEntry.id);
-
-        if (deleteError) {
-          console.error('Error removing routine:', deleteError);
-          setDialogOpen(false);
-          return;
-        }
-        console.log('Calendar entry removed successfully:', calendarEntry);
       }
-      await refreshCalendarData();
-      setRoutineId('');
-      setDialogOpen(false);
     }
-    catch (error) {
-      console.error('Error:', error);
-    }
-  };
+    setRoutineColors(prev => ({
+      ...prev, 
+      [selectedRoutineForColor.id]: color
+    }));
+
+    setColorDialogOpen(false);
+    console.log(`Color ${color} saved from routine ${selectedRoutineForColor.name}`);
+    await refreshCalendarData();
+  }
+  catch (error) {
+    console.error('Error saving routine color:', error);
+  }
+}
 
   if(!isLoggedIn) {
     return (
@@ -475,9 +626,12 @@ export default function CalendarPage() {
                 routines: routines,
                 calendarDates,
                 handleMouseOver,
-                handleMouseOut
+                handleMouseOut, 
+                routineColors
               }
             }}
+
+            key={JSON.stringify(routineColors)}
           />
         </LocalizationProvider>
 
@@ -502,13 +656,13 @@ export default function CalendarPage() {
         </div>
 
         {/* <Dialog open={dialogOpen} onClose={handleCancel}>*/}
-         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-          <DialogTitle>
-            Schedule a Workout
-            <div style={{ fontSize: "14px", fontWeight: "normal" }}>
-              Assign routine for {value.toLocaleDateString()}
-            </div>
-          </DialogTitle>
+         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
+  <DialogTitle>
+    <Typography variant="h6" component="div">Schedule a Workout</Typography>
+    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+      Assign routine for {value.toLocaleDateString()}
+    </Typography>
+  </DialogTitle>
           <DialogContent>
             <TextField
               select
@@ -523,10 +677,40 @@ export default function CalendarPage() {
               </MenuItem>
               {routines.map((option) => (
                 <MenuItem key={option.id} value={option.id}>
-                  {option.name}
+                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1,  width: '100%' }}>
+                  <Box 
+                  sx={{
+                    width: 16, height: 16, borderRadius: '50%',
+                    bgcolor: routineColors[option.id] || '#2196f3',
+                    border: '1px solid #ccc', 
+                    flexShrink: 0
+                  }}
+                  />
+                  <span>
+                  {option.name} ({option.details ? option.details.length : 0} exercises)
+                </span>
+                <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleColorEdit(option);
+                }}
+                sx={{ml: 'auto', minWidth: 'auto', p: 0.5}}>
+                  Change Color
+                </Button></Box>
                 </MenuItem>
               ))}
             </TextField>
+
+            {routineId && (
+              <Box sx={{ mt: 2, p: 2, backgroundColor: "#f5f5f5", borderRadius: 1 }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Selected Routine: {routines.find(r => r.id == routineId)?.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Exercises: {routines.find(r => r.id == routineId)?.details?.join(", ")}
+                </Typography>
+              </Box>
+                                )}
           </DialogContent>
           <DialogActions>
             <Button variant="contained" onClick={handleSaveData}>Save</Button>
@@ -538,16 +722,111 @@ export default function CalendarPage() {
             <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
           </DialogActions>
         </Dialog>
+
+        <Dialog 
+  open={colorDialogOpen} 
+  onClose={() => setColorDialogOpen(false)} 
+  maxWidth="xs" 
+  fullWidth
+  disableRestoreFocus
+>
+          <DialogTitle>
+    Choose Color for "{selectedRoutineForColor?.name}"
+  </DialogTitle>
+          <DialogContent>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, mt: 1 }}>
+      {ROUTINE_COLORS.map((color) => (
+          <Box
+            key={color.value}
+            onClick={() => handleColorSave(color.value)}
+            sx={{
+               width: 60,
+            height: 60,
+            bgcolor: color.value,
+            borderRadius: 1,
+            cursor: 'pointer',
+            border: routineColors[selectedRoutineForColor?.id] === color.value 
+              ? '3px solid #000' 
+              : '1px solid #ccc',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            '&:hover': {
+              transform: 'scale(1)',
+              transition: 'transform 0.2s'
+            }, 
+            '&:focus': { 
+              outline: '2px solid #1976d2',
+              outlineOffset: '2px'
+            }
+          }}
+          title={color.name}
+          role="button" 
+          tabIndex={0} 
+          onKeyDown={(e) => { 
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleColorSave(color.value);
+            }
+          }}
+        >
+            {routineColors[selectedRoutineForColor?.id] === color.value && (
+              <CheckIcon sx={{ fontSize: 20, color: 'white' }} />
+            )}
+            </Box>
+      ))}
+      </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setColorDialogOpen(false)}>Cancel</Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </>
   );
 }
 
+
+
 const CustomDay = React.memo(function CustomDay(props) {
-  const { day, selected, routines, calendarDates, handleMouseOver, handleMouseOut, ...other } = props;
-  const routine = routines.find(r => r.id == selected[getDateKey(day)]);
+  const { day, selected, routines, calendarDates, handleMouseOver, handleMouseOut, routineColors, ...other } = props;
+  const selectedRoutineId = selected[getDateKey(day)];
+  const routine = routines.find(r => r.id == selectedRoutineId);
   const isInCalendarTable = calendarDates.includes(getDateKey(day));
 
+  const routineColor = routineColors[selectedRoutineId] 
+    || routineColors[String(selectedRoutineId)] 
+    || routineColors[Number(selectedRoutineId)] 
+    || '#2196f3';
+
+
+  // const routineColor = (() => {
+  //   if (!selectedRoutineId) return '#2196f3';
+
+  //   const colorById = routineColors[selectedRoutineId];
+  //   const colorByStringId = routineColors[String(selectedRoutineId)];
+  
+  //   const finalColor = colorById || colorByStringId || '#2196f3';
+  //   return finalColor;
+  // })();
+
+  // if (selectedRoutineId) {
+  //   console.log(`Day ${getDateKey(day)}: routineId=${selectedRoutineId}, color=${routineColor}`);
+  // }
+  
+    if (selectedRoutineId) {
+    console.log(`📅 Day ${getDateKey(day)}:`, {
+      selectedRoutineId,
+      selectedRoutineIdType: typeof selectedRoutineId,
+      isInCalendarTable,
+      routineColor,
+      allRoutineColors: routineColors,
+      colorFromNumber: routineColors[Number(selectedRoutineId)],
+      colorFromString: routineColors[String(selectedRoutineId)]
+    });
+  }
+  
+  
   return (
     <div
       onMouseEnter={(e) => handleMouseOver(e, day)}
@@ -561,18 +840,25 @@ const CustomDay = React.memo(function CustomDay(props) {
           fontSize: "14px",
           padding: "10px !important",
           bgcolor: isInCalendarTable
-            ? "#2196f3 !important"
+            ? `${routineColor} !important`
             : routine 
-              ? "#c8e6c9"
+              ? `${routineColor}40 !important`
               : undefined,
           color: isInCalendarTable ? "white !important" : undefined,
           "&:hover": {
             backgroundColor: isInCalendarTable 
-              ? "#1976d2 !important"
-              : "#a5d6a7",
+              ? `${routineColor}CC !important`
+              : `${routineColor}60 !important`,
           },
         }}
       />
     </div>
+    );
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.day.getTime() === nextProps.day.getTime() &&
+    prevProps.selected === nextProps.selected &&
+    JSON.stringify(prevProps.routineColors) === JSON.stringify(nextProps.routineColors) &&
+    prevProps.calendarDates === nextProps.calendarDates
   );
-});
+}); 
