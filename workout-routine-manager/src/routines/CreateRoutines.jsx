@@ -14,6 +14,7 @@ import {
   Typography,
   Snackbar,
   IconButton,
+  Alert,
 } from "@mui/material";
 import PlusIcon from "../components/icons/PlusIcon";
 import CloseIcon from "../components/icons/CloseIcon";
@@ -122,9 +123,7 @@ export default function CreateRoutines() {
                     sx={{ marginTop: "2rem" }}
                   >
                     <Grid size={4}>
-                      <FormLabel sx={{ alignSelf: "end" }}>
-                        Routine
-                      </FormLabel>
+                      <FormLabel sx={{ alignSelf: "end" }}>Routine</FormLabel>
                     </Grid>
                     <Grid size={12}>
                       <TextField
@@ -150,12 +149,19 @@ export default function CreateRoutines() {
                               <div key={index}>
                                 <Divider />
 
-                                <Grid container columns={16} sx={{justifyContent: "space-between", alignItems: "center"}}>
+                                <Grid
+                                  container
+                                  columns={16}
+                                  sx={{
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                  }}
+                                >
                                   <Typography variant="h6">
-                                    Exercise {index+1}
+                                    Exercise {index + 1}
                                   </Typography>
                                   <IconButton onClick={() => remove(index)}>
-                                    <CloseIcon/>
+                                    <CloseIcon />
                                   </IconButton>
                                 </Grid>
 
@@ -388,13 +394,15 @@ export default function CreateRoutines() {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         autoHideDuration={3000}
         onClose={() => setSnack(false)}
-        message="Added new routine"
-        action={
-          <IconButton onClick={() => setSnack(false)}>
-            <CloseIcon />
-          </IconButton>
-        }
-      />
+      >
+        <Alert
+          onClose={() => setSnack(false)}
+          severity="success"
+          variant="filled"
+        >
+          Added new routine
+        </Alert>
+      </Snackbar>
     </>
   );
 }

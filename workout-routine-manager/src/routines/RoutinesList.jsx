@@ -14,6 +14,7 @@ import {
   Button,
   Snackbar,
   DialogContent,
+  Alert,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { store } from "../utils/ReduxStore";
@@ -28,7 +29,7 @@ export default function RoutinesList() {
   const [editRoutine, setEditRoutine] = useState(null);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [deleteSnack, setDeleteSnack] = useState(false);
-    const [editSnack, setEditSnack] = useState(false);
+  const [editSnack, setEditSnack] = useState(false);
   const open = Boolean(anchorEl);
   const routinesList = useSelector((state) => state.routines.routinesList);
 
@@ -73,17 +74,17 @@ export default function RoutinesList() {
     });
   };
 
-  function openSnack(){
+  function openSnack() {
     setEditSnack(true);
-  }  
+  }
 
   useEffect(() => {
     const fetchRoutines = async () => {
-    const { data } = await supabase
-      .from("routines")
-      .select("id, routineName, exercise");
-    if (data) store.dispatch(setData(data));
-  };
+      const { data } = await supabase
+        .from("routines")
+        .select("id, routineName, exercise");
+      if (data) store.dispatch(setData(data));
+    };
     fetchRoutines();
   }, []);
 
@@ -137,7 +138,11 @@ export default function RoutinesList() {
       </Menu>
 
       {editRoutine ? (
-        <EditDialogForm routine={editRoutine} handleClose={handleClose} openSnack={openSnack} />
+        <EditDialogForm
+          routine={editRoutine}
+          handleClose={handleClose}
+          openSnack={openSnack}
+        />
       ) : null}
 
       <Dialog open={deleteIndex ? true : false} onClose={handleClose}>
@@ -164,27 +169,30 @@ export default function RoutinesList() {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         autoHideDuration={3000}
         onClose={() => setDeleteSnack(false)}
-        message="Routine deleted"
-        action={
-          <IconButton onClick={() => setDeleteSnack(false)}>
-            <CloseIcon />
-          </IconButton>
-        }
-      />
+      >
+        <Alert
+          onClose={() => setDeleteSnack(false)}
+          severity="error"
+          variant="filled"
+        >
+          Routine deleted
+        </Alert>
+      </Snackbar>
 
-<Snackbar
+      <Snackbar
         open={editSnack}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         autoHideDuration={3000}
         onClose={() => setEditSnack(false)}
-        message="Routine updated"
-        action={
-          <IconButton onClick={() => setEditSnack(false)}>
-            <CloseIcon />
-          </IconButton>
-        }
-      />
-
+      >
+        <Alert
+          onClose={() => setEditSnack(false)}
+          severity="success"
+          variant="filled"
+        >
+          Routine updated
+        </Alert>
+      </Snackbar>
     </>
   );
 }
