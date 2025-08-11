@@ -19,6 +19,7 @@ import HttpsIcon from '@mui/icons-material/Https';
 import { useTheme, useMediaQuery } from "@mui/material";
 
 /*CREATE A NEW ACCOUNT*/
+var _s = $RefreshSig$();
 
 //validation with yup
 const validationSchema = yup.object({

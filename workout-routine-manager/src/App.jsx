@@ -34,6 +34,7 @@ import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
 import VerifyUser from "./registration/VerifyUser";
 import GoogleCalendar from "./GoogleCalendar";
 import IntroPage from "./IntroPage";
+import ThemeToggle from "./components/ThemeToggle";
 
 const drawerWidth = 220;
 
@@ -69,9 +70,10 @@ export default function App() {
         >
           <Toolbar
             sx={{
-              displex: "flex",
-              justifyContent: "center",
-              postion: "relative",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              position: "relative",
             }}
           >
             {isMobile && (
@@ -103,7 +105,7 @@ export default function App() {
                 Fitness Tracker
               </Typography>
             </Box>
-
+            <ThemeToggle />
             {/*sign out*/}
             <Box sx={{ marginLeft: "auto" }}>
               <Button
@@ -161,10 +163,10 @@ export default function App() {
                   <CreateListItem iconName="Calendar" text="Google Calendar" />
                 </Link>
                 ) :
-                 (<Link to={"/calendar"}>
+                (<Link to={"/calendar"}>
                   <CreateListItem iconName="Calendar" text="Calendar" />
                 </Link>)
-                }
+              }
             </List>
           </Box>
           <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
@@ -195,7 +197,7 @@ export default function App() {
         <Routes>
           {/*without registration*/}
           <Route path="/" element={<Dashboard />} />
-                    <Route path="/introPage" element={<IntroPage />} />
+          <Route path="/introPage" element={<IntroPage />} />
 
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
