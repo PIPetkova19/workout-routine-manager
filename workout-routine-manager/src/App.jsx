@@ -44,7 +44,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", minHeight: "100%" }}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -122,10 +122,9 @@ export default function App() {
         <Box
           component="main"
           sx={{
-            flexGrow: 1,
             p: 3,
             width: "100vw",
-            height: "100vh",
+            height: "100%",
             backgroundColor: "#F0F0F0",
           }}
         >

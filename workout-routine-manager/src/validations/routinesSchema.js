@@ -24,6 +24,8 @@ export const RoutineSchema = Yup.object().shape({
           .min(10, "Must have at least ten seconds of rests.")
           .max(60, "Cannot be more than a minute.")
           .required("Field is required."),
+        weight: Yup.number()
+          .min(0, "Can't be negative.")
       })
     )
 });

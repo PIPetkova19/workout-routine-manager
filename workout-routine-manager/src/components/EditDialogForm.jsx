@@ -1,114 +1,58 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogTitle,
+  Divider,
   FormLabel,
   Grid,
-  TextField,
-  Paper,
   Stack,
-  Divider,
-  Typography,
+  TextField,
+  Button,
   Snackbar,
   IconButton,
+  Typography,
 } from "@mui/material";
 import PlusIcon from "../components/icons/PlusIcon";
 import CloseIcon from "../components/icons/CloseIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { store } from "../utils/ReduxStore";
 import { FieldArray, Form, Formik } from "formik";
 import { RoutineSchema } from "../validations/routinesSchema";
-import { supabase } from "../supabase/supabase-client.js";
-import { useDispatch, useSelector } from "react-redux";
-import { createRoutine, setData } from "../utils/RoutinesReducer.js";
-import { store } from "../utils/ReduxStore";
+import { editRoutine } from "../utils/RoutinesReducer";
+import { supabase } from "../supabase/supabase-client";
 
-export default function CreateRoutines() {
-  const [open, setOpen] = useState(false);
-  const [snack, setSnack] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+export default function EditDialogForm({ routine, handleClose, openSnack }) {
+  const [isOpen, setIsOpen] = useState();
 
   const initialValues = {
-    routineName: "",
-    exercise: [
-      {
-        exerciseName: "",
-        sets: "",
-        reps: "",
-        rests: "",
-        weight: "",
-      },
-    ],
+    id: routine.id,
+    routineName: routine.routineName,
+    exercise: routine.exercise,
   };
 
-  const insertSupabase = async (routine) => {
-    await supabase.from("routines").insert(routine);
+  const editSupabase = async (routine) => {
+    await supabase.from("routines").update(routine).eq("id", routine.id);
   };
 
-  async function fetchRoutines() {
-    const { data } = await supabase
-      .from("routines")
-      .select("id, routineName, exercise");
-    if (data) store.dispatch(setData(data));
-  }
+  useEffect(() => {
+    setIsOpen(Boolean(routine));
+  }, []);
 
   return (
     <>
-      <Box
-        sx={{
-          backgroundColor: "white",
-          padding: "1.5rem",
-          borderRadius: "0.5rem",
-        }}
-      >
-        <Grid
-          container
-          spacing={2}
-          sx={{ justifyContent: "space-between", alignItems: "center" }}
-        >
-          <Stack>
-            <Typography variant="h4">Workout Routines</Typography>
-            <Typography variant="subtitle1">
-              Create and manage your workout plans.
-            </Typography>
-          </Stack>
-          <Button
-            variant="contained"
-            size="medium"
-            startIcon={<PlusIcon />}
-            sx={{ maxHeight: "3rem" }}
-            onClick={handleOpen}
-          >
-            Create Routine
-          </Button>
-        </Grid>
-      </Box>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create New Routine</DialogTitle>
-
+      <Dialog open={isOpen} onClose={handleClose}>
+        <DialogTitle>Edit routine</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Build your workout plan. Add as many exercises as you need.
-          </DialogContentText>
           <Formik
             initialValues={initialValues}
             validationSchema={RoutineSchema}
             onSubmit={(values) => {
-              insertSupabase(values);
-              dispatch(createRoutine(values));
-              fetchRoutines();
+              setIsOpen(false);
+              store.dispatch(editRoutine(values));
+              editSupabase(values);
+              openSnack();
               handleClose();
-              setSnack(true);
             }}
           >
             {({ values, handleChange, errors, touched }) => {
@@ -150,12 +94,19 @@ export default function CreateRoutines() {
                               <div key={index}>
                                 <Divider />
 
-                                <Grid container columns={16} sx={{justifyContent: "space-between", alignItems: "center"}}>
+                                <Grid
+                                  container
+                                  columns={16}
+                                  sx={{
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                  }}
+                                >
                                   <Typography variant="h6">
-                                    Exercise {index+1}
+                                    Exercise {index + 1}
                                   </Typography>
                                   <IconButton onClick={() => remove(index)}>
-                                    <CloseIcon/>
+                                    <CloseIcon />
                                   </IconButton>
                                 </Grid>
 
@@ -184,6 +135,7 @@ export default function CreateRoutines() {
                                       id={`exerciseName${index}`}
                                       size="small"
                                       name={`exercise.[${index}].exerciseName`}
+                                      value={exercise.exerciseName}
                                       error={
                                         touched.exercise &&
                                         errors.exercise &&
@@ -231,6 +183,7 @@ export default function CreateRoutines() {
                                           type="number"
                                           size="small"
                                           name={`exercise.[${index}].sets`}
+                                          value={exercise.sets}
                                           error={
                                             touched.exercise &&
                                             errors.exercise &&
@@ -254,6 +207,7 @@ export default function CreateRoutines() {
                                           type="number"
                                           size="small"
                                           name={`exercise.[${index}].reps`}
+                                          value={exercise.reps}
                                           error={
                                             touched.exercise &&
                                             errors.exercise &&
@@ -277,6 +231,7 @@ export default function CreateRoutines() {
                                           type="number"
                                           size="small"
                                           name={`exercise.[${index}].rests`}
+                                          value={exercise.rests}
                                           error={
                                             touched.exercise &&
                                             errors.exercise &&
@@ -324,6 +279,7 @@ export default function CreateRoutines() {
                                       type="number"
                                       size="small"
                                       name={`exercise.[${index}].weight`}
+                                      value={exercise.weight}
                                       error={
                                         touched.exercise &&
                                         errors.exercise &&
@@ -365,14 +321,13 @@ export default function CreateRoutines() {
                         </Grid>
                       )}
                     </FieldArray>
-
                     <Grid size={16}>
                       <Button
                         variant="contained"
                         type="submit"
                         sx={{ justifySelf: "flex-end" }}
                       >
-                        Create Routine
+                        Update Routine
                       </Button>
                     </Grid>
                   </Grid>
@@ -382,19 +337,6 @@ export default function CreateRoutines() {
           </Formik>
         </DialogContent>
       </Dialog>
-
-      <Snackbar
-        open={snack}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        autoHideDuration={3000}
-        onClose={() => setSnack(false)}
-        message="Added new routine"
-        action={
-          <IconButton onClick={() => setSnack(false)}>
-            <CloseIcon />
-          </IconButton>
-        }
-      />
     </>
   );
 }
