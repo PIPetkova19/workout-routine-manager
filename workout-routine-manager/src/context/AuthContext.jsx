@@ -18,25 +18,42 @@ function AuthProvider({ children }) {
         };
         getSession();
 
-        //event listener that listens for changes in user
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-            //if there is a change -> update user
-            setUser(session?.user ?? null);
-        });
-
-        return () => listener.subscription.unsubscribe();
+        /* //event listener that listens for changes in user
+         const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+             //if there is a change -> update user
+             setUser(session?.user ?? null);
+         });
+         //return () => listener.subscription.unsubscribe();*/
     }, []);
+
+    //sign up otp
+    async function handleSignUpWithOtp(email) {
+        try {
+            const { data, error } = await supabase.auth.signInWithOtp({
+                email,
+                options: {
+                    shouldCreateUser: false,
+                }
+            });
+
+            if (error) { throw error; }
+
+            alert("Email sent");
+            navigate("/verifyUser");
+        }
+
+        catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    };
 
     //creating a new account
     const handleSignUp = async (email, password) => {
         try {
             const { data, error } = await supabase.auth.signUp({ email, password });
             if (error) { throw error; }
-            setUser(data?.user);
-
-            //alert("Sign up successful");
-            //navigate to home page
-            // navigate("/");
+            await handleSignUpWithOtp(email);
         }
         catch (error) {
             console.error(error);
@@ -46,7 +63,6 @@ function AuthProvider({ children }) {
 
     //enter an existing account
     const handleSignIn = async (email, password) => {
-
         try {
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) { throw error; }
@@ -82,13 +98,14 @@ function AuthProvider({ children }) {
     const handleSignUpGoogle = async () => {
         try {
             const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: 'google'
+                provider: 'google',
+                options: {
+                    scopes: 'https://www.googleapis.com/auth/calendar'
+                }
             })
             if (error) { throw error; }
 
             setUser(data?.user);
-            //navigate to home
-            navigate("/");
         }
         catch (error) {
             console.error(error);
@@ -131,33 +148,13 @@ function AuthProvider({ children }) {
         }
     }
 
-    //sign up otp
-    const handleSignUpWithOtp = async (email) => {
-        try {
-            const { data, error } = await supabase.auth.signInWithOtp({
-                email,
-                options: {
-                    shouldCreateUser: false,
-                }
-            });
-
-            if (error) { throw error; }
-            alert("Email sent");
-            navigate("/verifyUser");
-        }
-
-        catch (error) {
-            console.error(error);
-            alert(error.message);
-        }
-    };
-
     //verify otp
     const handleVerifyOtp = async (email, token) => {
         try {
             const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
             if (error) { throw error; }
             alert("Verification successful");
+            setUser(data?.user);
             navigate("/");
         }
 

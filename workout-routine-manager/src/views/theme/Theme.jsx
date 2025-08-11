@@ -6,6 +6,8 @@ import {
   Button,
   Card,
   useTheme,
+  CardContent,
+  Typography
 } from "@mui/material";
 
 import {
