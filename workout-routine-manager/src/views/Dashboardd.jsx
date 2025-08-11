@@ -1,30 +1,45 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { CreateCard } from "./theme/Theme";
 import { fitnessData } from "../dataMockUp/data";
+import { AuthContext } from "../context/AuthContext";
+import { use } from 'react';
+import IntroPage from "../IntroPage";
 
 export default function Dashboard() {
+  const { user } = use(AuthContext);
+  const theme = useTheme();
+
   return (
-    <Box>
-        <Box sx={{ 
-            backgroundColor: "white",
+    user ?
+      <>
+        {/*if user is logged in*/}
+        <Box>
+          <Box sx={{
+           backgroundColor: theme.palette.background.paper,
             borderRadius: 2,
             mb: 2,
             justifyContent: "left",
             alignItems: "left"
           }}>
             <Typography variant="h3">
-                Welcome to your Dashboard!
+              Welcome to your Dashboard!
             </Typography>
             <Typography variant="subtitle1">
-                Here's your progress overview.
+              Here's your progress overview.
             </Typography>
+          </Box>
+          <Box sx={{ display: "flex" }}>
+            <CreateCard text={`Workouts This Month`} data={`${fitnessData.January.workoutsThisMonth}`} />
+            <CreateCard text={`Current Streak`} data={`${fitnessData.January.currentStreak} days`} />
+            <CreateCard text={`Total Volume Lifted`} data={`${fitnessData.January.totalVolumeLifted} kg`} />
+            <CreateCard text={`Active This Week`} data={`+${fitnessData.January.activeThisWeek}`} />
+          </Box>
         </Box>
-        <Box sx={{ display: "flex" }}>
-            <CreateCard text={`Workouts This Month`} data={`${fitnessData.January.workoutsThisMonth}`}/>
-            <CreateCard text={`Current Streak`} data={`${fitnessData.January.currentStreak} days`}/>
-            <CreateCard text={`Total Volume Lifted`} data={`${fitnessData.January.totalVolumeLifted} kg`}/>
-            <CreateCard text={`Active This Week`} data={`+${fitnessData.January.activeThisWeek}`}/>
-        </Box>
-    </Box>
+      </>
+      :
+      <>
+        {/*if user is logged out*/}
+        <IntroPage />
+      </>
   );
 }
