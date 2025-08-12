@@ -9,15 +9,51 @@ import { set } from "lodash";
 import Typography from '@mui/material/Typography';
 import CheckIcon from '@mui/icons-material/Check';
 import Box from '@mui/material/Box';
+import {
+  add,
+  compareAsc,
+  format,
+  isWeekend,
+  setYear,
+  setMonth,
+  sub
+} from "date-fns";
+import { isHoliday } from "date-fns-holiday-us";
+import { is } from "date-fns/locale";
+import { enGB } from 'date-fns/locale';
 // import ClearIcon  from "@mui/icons-material/Clear";
 // import IconButton from "@mui/material/IconButton";
 // import ImputAdornment from "@mui/material/InputAdornment";
+import emailjs from '@emailjs/browser';
 
 // const routines = [
 //   { id: 1, name: "Leg Day", exnum: 5, details: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Leg Curls"] },
 //   { id: 2, name: "Strength Training", exnum: 4, details: ["Bench Press", "Deadlift", "Pull Ups", "Shoulder Press"] },
 //   { id: 3, name: "Cardio", exnum: 3, details: ["Running", "Cycling", "Rowing"] }
 // ];
+const ROUTINE_COLORS = [
+  { value: '#f44336', name: 'Red' },
+  { value: '#9c27b0', name: 'Purple' },
+  { value: '#3f51b5', name: 'Indigo' },
+  { value: '#2196f3', name: 'Blue' },
+  { value: '#4caf50', name: 'Green' },
+  { value: '#8bc34a', name: 'Light Green' },
+  { value: '#ffeb3b', name: 'Yellow' },
+  { value: '#ff9800', name: 'Orange' },
+];
+
+const getColorHexByName = (colorName) => {
+  console.log('Getting hex for color name:', colorName);
+  const colorObj = ROUTINE_COLORS.find(color => color.name === colorName);
+  console.log('Found color object:', colorObj);
+  return colorObj ? colorObj.value : '#2196f3'; 
+};
+
+const getColorNameByHex = (hexValue) => {
+  const colorObj = ROUTINE_COLORS.find(color => color.value === hexValue);
+  return colorObj ? colorObj.name : null;
+};
+
 
 const getDateKey = (date) => {
   const year = date.getFullYear();
@@ -96,8 +132,10 @@ export default function CalendarPage() {
             const colorsMap = {};
             routineColors.forEach(item => {
               colorsMap[item.routine_id] = item.color;
+              colorsMap[String(item.routine_id)] = item.color;
             });
             setRoutineColors(colorsMap);
+            console.log('Initial routine colors loaded:', colorsMap);
           }
 
         if(calendarData.length > 0 && calendarData) {
@@ -106,8 +144,10 @@ export default function CalendarPage() {
           const selectedRoutines = {};
           calendarData.forEach(item => {
             selectedRoutines[item.calendar.date] = item.routines.id;
+            selectedRoutines[String(item.calendar.date)] = item.routines.id;
           });
           setSelected(selectedRoutines);
+          console.log('Initial selected routines with string keys:', selectedRoutines);
         }
         else {
           setCalendarDates([]);
@@ -244,6 +284,7 @@ const handleRoutineChange = (e) => {
       const colorsMap = {};
       routineColorsData.forEach(item => {
         colorsMap[item.routine_id] = item.color;
+    colorsMap[String(item.routine_id)] = item.color; 
       });
       setRoutineColors(colorsMap);
       console.log('Updated routine colors:', colorsMap);
@@ -256,8 +297,10 @@ const handleRoutineChange = (e) => {
         const selectedRoutines = {};
         calendarData.forEach(item => {
           selectedRoutines[item.calendar.date] = item.routines.id;
+          selectedRoutines[String(item.calendar.date)] = item.routines.id; 
         });
         setSelected(selectedRoutines);
+        console.log('Selected routines with string keys:', selectedRoutines); 
       } else {
         setCalendarDates([]);
         setSelected({});
@@ -272,11 +315,6 @@ const handleRoutineChange = (e) => {
   const handleSaveData = async () => {
     const selectedRoutineId = routineId && routineId !== '' ? parseInt(routineId) : null;
     const userIdInt = parseInt(userId);
-
-    console.log('=== SAVE ROUTINE START ===');
-    console.log('Date:', getDateKey(value));
-    console.log('Routine ID:', selectedRoutineId);
-    console.log('User ID:', userIdInt);
 
     if (!userIdInt) {
       console.warn('No user ID provided!!!');
@@ -296,7 +334,6 @@ const handleRoutineChange = (e) => {
         await handleRemoveData();
         return;
       }
-      console.log('Step 1: Checking calendar entry...');
       const { data: existingCalendar, error: checkError } = await supabase
         .from('calendar')
         .select('id')
@@ -339,8 +376,6 @@ const handleRoutineChange = (e) => {
         console.warn('No calendar ID found!!!');
         return;
       }
-
-      console.log('Step 2: Checking routine_date entry...');
       const { data: existingRoutineDate, error: routineDateError } = await supabase
         .from('routine_date')
         .select('*')
@@ -401,7 +436,6 @@ const handleRoutineChange = (e) => {
 
       await refreshCalendarData();
       setDialogOpen(false);
-      console.log('=== SAVE ROUTINE COMPLETED ===');
 
     } catch (error) {
       console.error('Error in handleSaveData:', error);
@@ -485,21 +519,16 @@ const handleRoutineChange = (e) => {
 //routine colors
 //--------------------------------------------------------------------
 
-const ROUTINE_COLORS = [
-  { value: '#f44336', name: 'Red' },
-  { value: '#9c27b0', name: 'Purple' },
-  { value: '#3f51b5', name: 'Indigo' },
-  { value: '#2196f3', name: 'Blue' },
-  { value: '#4caf50', name: 'Green' },
-  { value: '#8bc34a', name: 'Light Green' },
-  { value: '#ffeb3b', name: 'Yellow' },
-  { value: '#ff9800', name: 'Orange' },
-];
-
-const getColorByName = (colorName) => {
-  const colorObj = ROUTINE_COLORS.find(color => color.name === colorName);
-  return colorObj ? colorObj.value : '#2196f3'; 
-};
+// const ROUTINE_COLORS = [
+//   { value: '#f44336', name: 'Red' },
+//   { value: '#9c27b0', name: 'Purple' },
+//   { value: '#3f51b5', name: 'Indigo' },
+//   { value: '#2196f3', name: 'Blue' },
+//   { value: '#4caf50', name: 'Green' },
+//   { value: '#8bc34a', name: 'Light Green' },
+//   { value: '#ffeb3b', name: 'Yellow' },
+//   { value: '#ff9800', name: 'Orange' },
+// ];
 
 const handleColorEdit = (routine) => {
   setSelectedRoutineForColor(routine);
@@ -510,6 +539,13 @@ const handleColorSave = async(color) => {
   if(!selectedRoutineForColor) return;
   const userIdInt = parseInt(userId);
 
+  const colorName = ROUTINE_COLORS.find(c => c.value === color)?.name;
+  
+   if (!colorName) {
+    console.error('Color name not found for value:', color);
+    return;
+  }
+  
   try {
     const {data: existing, error: checkError } =await supabase
     .from('routine_colors').select('*').eq('routine_id', selectedRoutineForColor.id)
@@ -524,7 +560,8 @@ const handleColorSave = async(color) => {
     if (existing) {
        const {error: updateError} = await supabase
     .from('routine_colors')
-    .update({color: color})
+    // .update({color: color})
+    .update({color: colorName})
     .eq('routine_id', selectedRoutineForColor.id)
     .eq('user_id', userIdInt);
 
@@ -538,7 +575,8 @@ const handleColorSave = async(color) => {
       .insert([{
         routine_id: selectedRoutineForColor.id,
         user_id: userIdInt, 
-        color: color
+        // color: color
+        color: colorName
       }]);
 
       if(insertError) {
@@ -546,13 +584,17 @@ const handleColorSave = async(color) => {
         return;
       }
     }
-    setRoutineColors(prev => ({
-      ...prev, 
-      [selectedRoutineForColor.id]: color
-    }));
+ setRoutineColors(prev => {
+  const newColors = {
+    ...prev, 
+    [selectedRoutineForColor.id]: colorName,
+    [String(selectedRoutineForColor.id)]: colorName
+  };
+  return newColors;
+});
 
     setColorDialogOpen(false);
-    console.log(`Color ${color} saved from routine ${selectedRoutineForColor.name}`);
+    console.log(`Color ${colorName} saved from routine ${selectedRoutineForColor.name}`);
     await refreshCalendarData();
   }
   catch (error) {
@@ -611,7 +653,7 @@ const handleColorSave = async(color) => {
           </Button>
         </Paper>
 
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
           <StaticDatePicker
             value={value}
             onChange={handleDayClick}
@@ -622,7 +664,7 @@ const handleColorSave = async(color) => {
             }}
             slotProps={{
               day: {
-                selected,
+                selectedRoutines: selected,    
                 routines: routines,
                 calendarDates,
                 handleMouseOver,
@@ -630,8 +672,30 @@ const handleColorSave = async(color) => {
                 routineColors
               }
             }}
-
-            key={JSON.stringify(routineColors)}
+            sx={{
+              '& .MuiDayCalendar-weekDayLabel': {
+                color: '#333',
+                // fontWeight: 'bold', 
+                fontSize: "14px"
+              },
+              '& .MuiDayCalendar-weekDayLabel:nth-of-type(6), & .MuiDayCalendar-weekDayLabel:nth-of-type(7)': {
+                color: '#1976d2', 
+              },
+               '& .MuiPickersCalendarHeader-label': {
+                color: '#1976d2', 
+                fontSize: '18px',
+                //fontWeight: 'bold'
+              },
+              '& .MuiPickersArrowSwitcher-button': {
+                color: '#1976d2' 
+              },
+              '& .MuiDateCalendar-root .MuiPickersCalendarHeader-root .MuiPickersCalendarHeader-label': {
+                color: '#1976d2', 
+                //fontSize: '20px',
+                //fontWeight: '600'
+              }
+            }}
+            key={`calendar-${Object.values(routineColors).join(",")}`}
           />
         </LocalizationProvider>
 
@@ -681,7 +745,8 @@ const handleColorSave = async(color) => {
                   <Box 
                   sx={{
                     width: 16, height: 16, borderRadius: '50%',
-                    bgcolor: routineColors[option.id] || '#2196f3',
+                    //bgcolor: routineColors[option.id] || '#2196f3',
+                    bgcolor: getColorHexByName(routineColors[option.id]) || '#2196f3',
                     border: '1px solid #ccc', 
                     flexShrink: 0
                   }}
@@ -745,7 +810,8 @@ const handleColorSave = async(color) => {
             bgcolor: color.value,
             borderRadius: 1,
             cursor: 'pointer',
-            border: routineColors[selectedRoutineForColor?.id] === color.value 
+            //border: routineColors[selectedRoutineForColor?.id] === color.value 
+            border: routineColors[selectedRoutineForColor?.id] === color.name
               ? '3px solid #000' 
               : '1px solid #ccc',
             display: 'flex',
@@ -754,11 +820,13 @@ const handleColorSave = async(color) => {
             '&:hover': {
               transform: 'scale(1)',
               transition: 'transform 0.2s'
-            }, 
-            '&:focus': { 
-              outline: '2px solid #1976d2',
-              outlineOffset: '2px'
             }
+            // '&:focus': { 
+            //   outline: '2px solid #1976d2',
+            //   outlineOffset: '2px'
+            // }
+
+            
           }}
           title={color.name}
           role="button" 
@@ -770,12 +838,11 @@ const handleColorSave = async(color) => {
             }
           }}
         >
-            {routineColors[selectedRoutineForColor?.id] === color.value && (
-              <CheckIcon sx={{ fontSize: 20, color: 'white' }} />
-            )}
+            {routineColors[selectedRoutineForColor?.id] === color.name && (
+  <CheckIcon sx={{ fontSize: 20, color: 'white' }} />
+)}
             </Box>
-      ))}
-      </Box>
+      ))}</Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setColorDialogOpen(false)}>Cancel</Button>
@@ -788,45 +855,51 @@ const handleColorSave = async(color) => {
 
 
 
-const CustomDay = React.memo(function CustomDay(props) {
-  const { day, selected, routines, calendarDates, handleMouseOver, handleMouseOut, routineColors, ...other } = props;
-  const selectedRoutineId = selected[getDateKey(day)];
+const CustomDay = function CustomDay(props) {
+  const { day, selectedRoutines, routines, calendarDates, handleMouseOver, handleMouseOut, routineColors, ...other } = props;
+  const selectedRoutineId = selectedRoutines[getDateKey(day)];  
   const routine = routines.find(r => r.id == selectedRoutineId);
   const isInCalendarTable = calendarDates.includes(getDateKey(day));
 
-  const routineColor = routineColors[selectedRoutineId] 
+
+
+  const colorName = routineColors[selectedRoutineId] 
     || routineColors[String(selectedRoutineId)] 
-    || routineColors[Number(selectedRoutineId)] 
-    || '#2196f3';
+    || routineColors[Number(selectedRoutineId)];
 
-
-  // const routineColor = (() => {
-  //   if (!selectedRoutineId) return '#2196f3';
-
-  //   const colorById = routineColors[selectedRoutineId];
-  //   const colorByStringId = routineColors[String(selectedRoutineId)];
-  
-  //   const finalColor = colorById || colorByStringId || '#2196f3';
-  //   return finalColor;
-  // })();
-
-  // if (selectedRoutineId) {
-  //   console.log(`Day ${getDateKey(day)}: routineId=${selectedRoutineId}, color=${routineColor}`);
+  // if (dayKey === '2025-08-10') {
+  //   console.log(`${dayKey}:`, {
+  //     dayObject: day,
+  //     dayKey: dayKey,
+  //     selectedRoutinesState: selectedRoutines,        
+  //     selectedKeys: Object.keys(selectedRoutines),    
+  //     selectedValues: Object.values(selectedRoutines),
+  //     selectedRoutineId: selectedRoutineId,
+  //     hasMatchingKey: selectedRoutines.hasOwnProperty(dayKey),
+  //     keyDirectLookup: selectedRoutines[dayKey],
+  //     calendarDatesArray: calendarDates,
+  //     isInCalendarTable: isInCalendarTable,
+  //     routineColorsState: routineColors,
+  //     colorName: colorName
+  //   });
   // }
-  
-    if (selectedRoutineId) {
-    console.log(`📅 Day ${getDateKey(day)}:`, {
-      selectedRoutineId,
-      selectedRoutineIdType: typeof selectedRoutineId,
-      isInCalendarTable,
-      routineColor,
-      allRoutineColors: routineColors,
-      colorFromNumber: routineColors[Number(selectedRoutineId)],
-      colorFromString: routineColors[String(selectedRoutineId)]
-    });
+
+  let routineColor;
+  switch (colorName) {
+    case 'Red': routineColor = '#f44336'; break;
+    case 'Purple': routineColor = '#9c27b0'; break;
+    case 'Indigo': routineColor = '#3f51b5'; break;
+    case 'Blue': routineColor = '#2196f3'; break;
+    case 'Green': routineColor = '#4caf50'; break;
+    case 'Light Green': routineColor = '#8bc34a'; break;
+    case 'Yellow': routineColor = '#ffeb3b'; break;
+    case 'Orange': routineColor = '#ff9800'; break;
+    default: routineColor = '#2196f3';
   }
-  
-  
+
+  //const isWeekendRed = isWeekend(day);
+  const isHolidayRed = isHoliday(day);
+
   return (
     <div
       onMouseEnter={(e) => handleMouseOver(e, day)}
@@ -839,26 +912,32 @@ const CustomDay = React.memo(function CustomDay(props) {
           borderRadius: "0px !important",
           fontSize: "14px",
           padding: "10px !important",
-          bgcolor: isInCalendarTable
+          bgcolor: isInCalendarTable 
             ? `${routineColor} !important`
             : routine 
-              ? `${routineColor}40 !important`
+              ? `${routineColor}CC !important`
               : undefined,
           color: isInCalendarTable ? "white !important" : undefined,
-          "&:hover": {
+          //color: isHolidayRed ? '#f44336' : undefined,
+
+          '&.Mui-selected': {
             backgroundColor: isInCalendarTable 
-              ? `${routineColor}CC !important`
-              : `${routineColor}60 !important`,
+              ? `${routineColor} !important`    
+              : routine 
+                ? `${routineColor}CC !important`
+                : 'transparent !important',     
+            color: isInCalendarTable ? "white !important" : 'inherit !important',
+            //color: isWeekendRed || isHolidayRed ? '#f44336' : undefined,
           },
+
+          
+          // "&:hover": {
+          //   backgroundColor: isInCalendarTable 
+          //     ? `${routineColor}CC !important`
+          //     : `${routineColor}60 !important`,
+          // },
         }}
       />
     </div>
     );
-}, (prevProps, nextProps) => {
-  return (
-    prevProps.day.getTime() === nextProps.day.getTime() &&
-    prevProps.selected === nextProps.selected &&
-    JSON.stringify(prevProps.routineColors) === JSON.stringify(nextProps.routineColors) &&
-    prevProps.calendarDates === nextProps.calendarDates
-  );
-}); 
+};
