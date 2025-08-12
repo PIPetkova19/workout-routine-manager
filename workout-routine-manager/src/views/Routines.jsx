@@ -1,18 +1,21 @@
-import { Box, Typography, Card, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
+import CreateRoutines from "../routines/CreateRoutines";
+import RoutinesList from "../routines/RoutinesList";
+import { use } from "react";
+import { Provider } from "react-redux";
+import { store } from "../utils/ReduxStore";
+import { AuthContext } from "../context/AuthContext";
 
-export default function Routines(){
-    const theme = useTheme();
-    
-    return (
-        <Box sx={{ color: theme.palette.text.primary }}>
-            <Typography variant="h3" component="h1" sx={{ mb: 3 }}>
-                Routines
-            </Typography>
-            <Card sx={{ p: 3, backgroundColor: theme.palette.background.paper }}>
-                <Typography variant="body1">
-                    Manage your workout routines here!
-                </Typography>
-            </Card>
-        </Box>
-    )
+export default  function Routines() {
+  const {user} = use(AuthContext);
+
+console.log("user data: ", user.id);
+  return (
+    <Box>
+      <Provider store={store}>
+        <CreateRoutines loggedUserId={user.id} />
+        <RoutinesList loggedUserId={user.id} />
+      </Provider>
+    </Box>
+  );
 }
