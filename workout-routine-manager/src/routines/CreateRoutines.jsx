@@ -8,7 +8,6 @@ import {
   FormLabel,
   Grid,
   TextField,
-  Paper,
   Stack,
   Divider,
   Typography,
@@ -22,11 +21,11 @@ import { useState } from "react";
 import { FieldArray, Form, Formik } from "formik";
 import { RoutineSchema } from "../validations/routinesSchema";
 import { supabase } from "../supabase/supabase-client.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createRoutine, setData } from "../utils/RoutinesReducer.js";
 import { store } from "../utils/ReduxStore";
 
-export default function CreateRoutines() {
+export default function CreateRoutines({loggedUserId}) {
   const [open, setOpen] = useState(false);
   const [snack, setSnack] = useState(false);
   const dispatch = useDispatch();
@@ -52,13 +51,14 @@ export default function CreateRoutines() {
   };
 
   const insertSupabase = async (routine) => {
-    await supabase.from("routines").insert(routine);
+    await supabase.from("routines").insert({routineName: routine.routineName, exercise: routine.exercise, user_id: loggedUserId});
   };
 
   async function fetchRoutines() {
     const { data } = await supabase
       .from("routines")
-      .select("id, routineName, exercise");
+      .select("id, routineName, exercise")
+      .eq("user_id", loggedUserId);
     if (data) store.dispatch(setData(data));
   }
 

@@ -60,9 +60,10 @@ export default function App() {
   const { user } = use(AuthContext);
 
   return (
-    <BrowserRouter>
-      <Box sx={{ display: "flex", minHeight: "100%" }}>
-        <CssBaseline />
+    <Box sx={{ display: "flex", minHeight: "100%" }}>
+      <CssBaseline />
+
+      {user && (<>
         <AppBar
           position="fixed"
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -126,8 +127,8 @@ export default function App() {
 
           </Toolbar>
         </AppBar>
-      </Box>
-      )
+      </>
+      )}
 
       {user && (<>
         <Drawer
@@ -243,6 +244,6 @@ export default function App() {
 
         </Routes>
       </Box>
-    </BrowserRouter>
+    </Box>
   );
 }

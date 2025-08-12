@@ -21,9 +21,8 @@ import { store } from "../utils/ReduxStore";
 import { deleteRoutine, setData } from "../utils/RoutinesReducer";
 import DetailsIcon from "../components/icons/DetailsIcon";
 import EditDialogForm from "../components/EditDialogForm";
-import CloseIcon from "../components/icons/CloseIcon";
 
-export default function RoutinesList() {
+export default function RoutinesList({ loggedUserId }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [editRoutine, setEditRoutine] = useState(null);
@@ -80,9 +79,11 @@ export default function RoutinesList() {
 
   useEffect(() => {
     const fetchRoutines = async () => {
-      const { data } = await supabase
-        .from("routines")
-        .select("id, routineName, exercise");
+      const { data } = await supabase.from("routines")
+      .select("id, routineName, exercise")
+      .eq("user_id", loggedUserId);
+
+      console.log("routines list db result: ", data);
       if (data) store.dispatch(setData(data));
     };
     fetchRoutines();
