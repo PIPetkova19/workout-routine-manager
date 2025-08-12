@@ -5,8 +5,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { iconMap } from "./views/theme/Theme";
 import Grid from '@mui/material/Grid';
+import { useTheme } from "@mui/material/styles";
 
 export default function IntroPage() {
+    const theme = useTheme();
     const FitBitIcon = iconMap["FitBit"];
 
     return (
@@ -16,7 +18,7 @@ export default function IntroPage() {
                 <AppBar sx={{
                     boxShadow: "none",
                     borderBottom: "none",
-                    backgroundColor: "#e1ecf8cc",
+                    backgroundColor: theme.customShadows.background,
                     backdropFilter: "blur(10px)"
                 }}>
                     <Toolbar sx={{
@@ -29,14 +31,14 @@ export default function IntroPage() {
                                 {/*icon*/}
                                 <FitBitIcon
                                     fontSize="medium"
-                                    sx={{ color: "#1976d2" }}
+                                    sx={{ color: theme.customShadows.text.primary }}
                                 />
                                 <Typography
                                     variant="h5"
                                     component="div"
                                     sx={{
                                         ml: 1,
-                                        color: "#1976d2",
+                                        color: theme.customShadows.text.primary,
                                         fontWeight: "bold"
                                     }}>
                                     FT
@@ -53,7 +55,7 @@ export default function IntroPage() {
                                     textDecoration: "none",
                                     borderRadius: "8px",
                                     "&:hover": {
-                                        backgroundColor: "#e1ecf8ff",
+                                        backgroundColor: theme.customShadows.background,
                                     }
                                 }}
                             >
@@ -66,11 +68,11 @@ export default function IntroPage() {
                                 to="/signUp"
                                 sx={{
                                     ml: 1,
-                                    backgroundColor: "#1976d2",
+                                    backgroundColor: theme.customShadows.text.primary,
                                     color: "white",
                                     borderRadius: "8px",
                                     "&:hover": {
-                                        backgroundColor: "#1865b3ff",
+                                        backgroundColor: theme.customShadows.text.secondary,
                                         color: "white"
                                     }
                                 }}
@@ -89,7 +91,7 @@ export default function IntroPage() {
                 sx={{
                     height: '100%',
                     width: '100%',
-                    backgroundColor: "#e1ecf8ff",
+                    backgroundColor: theme.customShadows.background,
                 }}>
 
                 {/*text*/}
@@ -116,11 +118,21 @@ export default function IntroPage() {
                         }}>
 
                         <Box sx={{ textAlign: "center" }}>
-                            <FitBitIcon sx={{ fontSize: 60, color: "#1976d2" }} />
+                            <FitBitIcon sx={{ fontSize: 60, color: theme.customShadows.text.primary }} />
                         </Box>
 
-                        <Box> Take control of your fitness </Box>
-                        <Box sx={{ color: "#1976d2" }}>journey with our tracker</Box>
+                        <Box 
+                        sx={{
+                            color: theme.customShadows.primary
+                        }}> 
+                        Take control of your fitness
+                         </Box>
+                        <Box 
+                        sx={{ 
+                            color: theme.customShadows.text.primary
+                             }}>
+                                journey with our tracker
+                                </Box>
                     </Typography>
 
                     <Typography
@@ -130,7 +142,10 @@ export default function IntroPage() {
                             mb: 4,
                             textTransform: "uppercase"
                         }}>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} 
+                          sx={{
+                            color: theme.customShadows.primary
+                        }}>
                             <Grid>   Easily schedule workouts</Grid>
                             <Grid> log your sets and reps</Grid>
                             <Grid>  stay consistent</Grid>
@@ -144,11 +159,11 @@ export default function IntroPage() {
                             to="/signUp"
                             sx={{
                                 ml: 1,
-                                backgroundColor: "#1976d2",
+                                backgroundColor: theme.customShadows.text.primary,
                                 color: "white",
                                 borderRadius: "20px",
                                 "&:hover": {
-                                    backgroundColor: "#1865b3ff",
+                                    backgroundColor: theme.customShadows.text.secondary,
                                     color: "white"
                                 }
                             }}
@@ -181,11 +196,14 @@ export default function IntroPage() {
                         <Typography
                             variant="h6"
                             component="h2"
-                            sx={{ mb: 4 }}>
+                            sx={{ 
+                                mb: 4 ,
+                            color: theme.customShadows.secondary
+                            }}>
                             Designed to adapt perfectly to both mobile and desktop screens, ensuring ease of use everywhere.
                         </Typography>
                         <img src="/images/tabletPhone.png" alt="Tablet"
-                         style={{ maxWidth: "100%", height: "auto" }} />
+                            style={{ maxWidth: "100%", height: "auto" }} />
                     </Box>
                 </Grid>
             </Grid>

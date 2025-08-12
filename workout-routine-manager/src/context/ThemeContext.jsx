@@ -43,6 +43,20 @@ export const ThemeProvider = ({ children }) => {
         primary: mode === 'light' ? '#213547' : '#ffffff',
         secondary: mode === 'light' ? '#666666' : '#b0b0b0',
       },
+    }, 
+    //custom for intro page
+    customShadows: {
+      card: mode === 'light'
+        ? "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
+        : "rgba(255, 255, 255, 0.16) 0px 3px 6px, rgba(255, 255, 255, 0.23) 0px 3px 6px",
+
+      background: '#e1ecf8ff',
+       text: {
+        primary: '#1976d2',
+        secondary:  '#1865b3ff'
+      },
+      primary:'#1f1f23ff',
+      secondary:'#f5f5f5',
     },
     components: {
       MuiAppBar: {

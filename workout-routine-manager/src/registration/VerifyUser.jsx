@@ -10,10 +10,12 @@ import Button from '@mui/material/Button';
 import { use, useState } from 'react';
 import HttpsIcon from '@mui/icons-material/Https';
 import { supabase } from "../supabase/supabase-client.js";
+import { useTheme } from "@mui/material/styles";
 
 //enter verification code
 
 function VerifyUser() {
+    const theme = useTheme();
     const [token, setToken] = useState("");
     const { handleVerifyOtp } = use(AuthContext);
 
@@ -59,20 +61,23 @@ function VerifyUser() {
                         xs: '30px 16px',
                         sm: '50px 20px',
                     },
-                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;",
+                    boxShadow: theme.customShadows.card,
                     borderRadius: "5px",
                 }}
             >
 
                 <Box>
-                    <Typography variant="h3" component="h1" color="primary"
-                        sx={{ fontWeight: "bold" }}>
+                    <Typography variant="h3" component="h1" 
+                        sx={{
+                             fontWeight: "bold", 
+                            color: theme.palette.primary.main
+                              }}>
                         Enter Verification Code
                     </Typography>
                 </Box>
 
                 <Box>
-                    <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                    <Typography variant="subtitle1" component="p" sx={{ color: theme.palette.text.secondary  }}>
                         Enter the 6-digit code to confirm that you received the text message.
                     </Typography>
                 </Box>

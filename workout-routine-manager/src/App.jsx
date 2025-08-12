@@ -35,6 +35,7 @@ import VerifyUser from "./registration/VerifyUser";
 import GoogleCalendar from "./GoogleCalendar";
 import IntroPage from "./IntroPage";
 import ThemeToggle from "./components/ThemeToggle";
+import { useLocation } from 'react-router-dom';
 
 const drawerWidth = 220;
 
@@ -58,7 +59,9 @@ export default function App() {
     await handleSignOut();
   }
   const { user } = use(AuthContext);
-
+  const location = useLocation();
+  const isIntroPage = location.pathname === "/";
+  console.log(isIntroPage);
   return (
     <Box sx={{ display: "flex", minHeight: "100%" }}>
       <CssBaseline />
@@ -189,7 +192,9 @@ export default function App() {
         sx={{
           p: 3,
           width: "100%",
-          backgroundColor: "#e1ecf8ff",//!
+            backgroundColor: isIntroPage
+          ? theme.customShadows.background
+          : theme.palette.background.main,
         }}
       >
         <Toolbar />

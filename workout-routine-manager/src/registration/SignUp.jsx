@@ -106,19 +106,22 @@ function SignUp() {
                         xs: '30px 16px',
                         sm: '50px 20px',
                     },
-                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;",
+                    boxShadow: theme.customShadows.card,
                     borderRadius: "5px",
                 }}
             >
                 <Box>
-                    <Typography variant="h3" component="h1" color="primary"
-                        sx={{ fontWeight: "bold" }}>
+                    <Typography variant="h3" component="h1"
+                        sx={{
+                            fontWeight: "bold",
+                            color: theme.palette.primary.main
+                        }}>
                         Sign Up
                     </Typography>
                 </Box>
 
                 <Box>
-                    <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                    <Typography variant="subtitle1" component="p" sx={{ color: theme.palette.text.secondary }}>
                         Enter your details below  to create your account.
                     </Typography>
                 </Box>
@@ -189,7 +192,7 @@ function SignUp() {
 
                 {/*hr*/}
                 <Divider>
-                    <Typography sx={{ color: "rgba(52, 52, 52, 1)" }}>or</Typography>
+                    <Typography sx={{ color: theme.palette.text.secondary }}>or</Typography>
                 </Divider>
 
                 {/*google sign up*/}
@@ -210,7 +213,11 @@ function SignUp() {
 
                 {/*Sign in link*/}
                 <Box>
-                    <Typography variant="subtitle2" component="p" sx={{ textAlign: "center", color: "rgba(52, 52, 52, 1)" }}>
+                    <Typography variant="subtitle2" component="p"
+                        sx={{
+                            textAlign: "center",
+                            color: theme.palette.text.primary
+                        }}>
                         Already have an account?{' '}
                         <Link to="/signIn" style={{ fontWeight: "bold", textDecoration: "none" }}>
                             Sign in
