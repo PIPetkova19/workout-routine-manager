@@ -73,9 +73,9 @@ export default function CalendarPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [tooltip, setTooltip] = useState({ visible: false, text: "", x: 0, y: 0 });
 
-  const [userId, setUserId] = useState('');
-  const [userLoginOpen, setUserLoginOpen] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [userId, setUserId] = useState('');
+  // const [userLoginOpen, setUserLoginOpen] = useState(true);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [routineColors, setRoutineColors] = useState({});
   const [colorDialogOpen, setColorDialogOpen] = useState(false);
@@ -83,19 +83,18 @@ export default function CalendarPage() {
 
   useEffect(() => {
     const fetchCalendarData = async () => {
-      if(!isLoggedIn || !userId) {
-        console.error('User is not logged in. Cannot fetch calendar data.');
-        return;
-      }
+      // if(!isLoggedIn || !userId) {
+      //   console.error('User is not logged in. Cannot fetch calendar data.');
+      //   return;
+      // }
       try {
         setLoading(true);
-        const userIdInt = parseInt(userId);
+        //const userIdInt = parseInt(userId);
         const { data: calendarData, error: calendarError } = await supabase
           .from('routine_date')
           .select(`
             date_id,
             routine_id,
-            user_id,
             calendar!inner (
               id,
               date
@@ -106,7 +105,7 @@ export default function CalendarPage() {
               exercise
             )
           `)
-          .eq('user_id', userIdInt);
+          // .eq('user_id', userIdInt);
 
         if (calendarError) {
           console.error('Error fetching calendar dates:', calendarError);
@@ -126,7 +125,7 @@ export default function CalendarPage() {
         const {data: routineColors, error: colorsError} = await supabase
           .from('routine_colors')
           .select('*')
-          .eq('user_id', userIdInt);
+          //.eq('user_id', userIdInt);
 
           if(!colorsError && routineColors) {
             const colorsMap = {};
@@ -170,19 +169,20 @@ export default function CalendarPage() {
       } finally { setLoading(false); }
     };
     fetchCalendarData();
-  }, [userId, isLoggedIn]);
+  }, []);
+  // }, [userId, isLoggedIn]);
 
-   const handleUserLogin = () => {
-    if (userId.trim()) {
-      setIsLoggedIn(true);
-      setUserLoginOpen(false);
-      console.log(`User ${userId} logged in`);
-    }
-  };
+  //  const handleUserLogin = () => {
+  //   if (userId.trim()) {
+  //     setIsLoggedIn(true);
+  //     setUserLoginOpen(false);
+  //     console.log(`User ${userId} logged in`);
+  //   }
+  // };
 
-  const handleUserIdChange = (e) => {
-    setUserId(e.target.value);
-  };
+  // const handleUserIdChange = (e) => {
+  //   setUserId(e.target.value);
+  // };
 
   const handleDayClick = (newValue) => {
     const oldDay = value.getDate(), oldMonth = value.getMonth(), oldYear = value.getFullYear();
@@ -249,15 +249,14 @@ const handleRoutineChange = (e) => {
 
   const refreshCalendarData = async () => {
     try {
-      const userIdInt = parseInt(userId);
-      console.log('Refreshing calendar data for user:', userIdInt);
+      //const userIdInt = parseInt(userId);
+      //console.log('Refreshing calendar data for user:', userIdInt);
       
       const { data: calendarData, error: calendarError } = await supabase
         .from('routine_date')
         .select(`
           date_id,
           routine_id,
-          user_id,
           calendar!inner (
             id,
             date
@@ -268,7 +267,7 @@ const handleRoutineChange = (e) => {
             exercise
           )
         `)
-        .eq('user_id', userIdInt);
+        // .eq('user_id', userIdInt);
 
       if (calendarError) {
         console.error('Error fetching calendar data:', calendarError);
@@ -278,13 +277,13 @@ const handleRoutineChange = (e) => {
       const { data: routineColorsData, error: colorsError } = await supabase
       .from('routine_colors')
       .select('*')
-      .eq('user_id', userIdInt);
+      // .eq('user_id', userIdInt);
 
     if (!colorsError && routineColorsData) {
       const colorsMap = {};
       routineColorsData.forEach(item => {
-        colorsMap[item.routine_id] = item.color;
-    colorsMap[String(item.routine_id)] = item.color; 
+      colorsMap[item.routine_id] = item.color;
+      colorsMap[String(item.routine_id)] = item.color; 
       });
       setRoutineColors(colorsMap);
       console.log('Updated routine colors:', colorsMap);
@@ -314,13 +313,13 @@ const handleRoutineChange = (e) => {
 
   const handleSaveData = async () => {
     const selectedRoutineId = routineId && routineId !== '' ? parseInt(routineId) : null;
-    const userIdInt = parseInt(userId);
+    //const userIdInt = parseInt(userId);
 
-    if (!userIdInt) {
-      console.warn('No user ID provided!!!');
-      setDialogOpen(false);
-      return;
-    }
+    // if (!userIdInt) {
+    //   console.warn('No user ID provided!!!');
+    //   setDialogOpen(false);
+    //   return;
+    // }
 
     if (!getDateKey(value)) {
       console.warn('No date key found!!!');
@@ -380,7 +379,7 @@ const handleRoutineChange = (e) => {
         .from('routine_date')
         .select('*')
         .eq('date_id', calendarId)
-        .eq('user_id', userIdInt)
+        //.eq('user_id', userIdInt)
         .maybeSingle(); 
 
       if (routineDateError && routineDateError.code !== 'PGRST116') {
@@ -394,7 +393,7 @@ const handleRoutineChange = (e) => {
           .from('routine_date')
           .update({ routine_id: selectedRoutineId })
           .eq('date_id', calendarId)
-          .eq('user_id', userIdInt);
+          //.eq('user_id', userIdInt);
 
         if (updateError) {
           console.error('Error updating routine_date entry:', updateError);
@@ -406,11 +405,12 @@ const handleRoutineChange = (e) => {
         console.log('Creating new routine_date entry...');
         const insertData = {
           date_id: calendarId,
-          user_id: userIdInt,
+          //user_id: userIdInt,
           routine_id: selectedRoutineId
         };
 
-        if (!insertData.date_id || !insertData.user_id || !insertData.routine_id) {
+        if (!insertData.date_id || !insertData.routine_id) {
+        //if (!insertData.date_id || !insertData.user_id || !insertData.routine_id) {
           console.warn('Missing required fields in insertData:', insertData);
           return;
         }
@@ -444,11 +444,11 @@ const handleRoutineChange = (e) => {
 
 
   //remove routine
-  //remove routine 
-  //---------------------------------------------------------------
+  //remove routine
+  //----------------------------------------------------------------
 
   const handleRemoveData = async () => {
-    const userIdInt = parseInt(userId);
+    // const userIdInt = parseInt(userId);
 
     try {
       const { data: calendarData, error: calendarError } = await supabase
@@ -479,7 +479,7 @@ const handleRoutineChange = (e) => {
         .from('routine_date')
         .delete()
         .eq('date_id', calendarData.id)
-        .eq('user_id', userIdInt);
+        //.eq('user_id', userIdInt);
 
       if (deleteError) {
         console.error('Error removing routine:', deleteError);
@@ -537,7 +537,7 @@ const handleColorEdit = (routine) => {
 
 const handleColorSave = async(color) => {
   if(!selectedRoutineForColor) return;
-  const userIdInt = parseInt(userId);
+  //const userIdInt = parseInt(userId);
 
   const colorName = ROUTINE_COLORS.find(c => c.value === color)?.name;
   
@@ -549,7 +549,7 @@ const handleColorSave = async(color) => {
   try {
     const {data: existing, error: checkError } =await supabase
     .from('routine_colors').select('*').eq('routine_id', selectedRoutineForColor.id)
-    .eq('user_id', userIdInt)
+    //.eq('user_id', userIdInt)
     .maybeSingle();
 
     if(checkError) {
@@ -563,7 +563,7 @@ const handleColorSave = async(color) => {
     // .update({color: color})
     .update({color: colorName})
     .eq('routine_id', selectedRoutineForColor.id)
-    .eq('user_id', userIdInt);
+    //.eq('user_id', userIdInt);
 
     if(updateError) {
       console.error('Error updating color: ', updateError);
@@ -574,7 +574,7 @@ const handleColorSave = async(color) => {
       .from('routine_colors')
       .insert([{
         routine_id: selectedRoutineForColor.id,
-        user_id: userIdInt, 
+        //user_id: userIdInt, 
         // color: color
         color: colorName
       }]);
@@ -602,43 +602,43 @@ const handleColorSave = async(color) => {
   }
 }
 
-  if(!isLoggedIn) {
-    return (
-      <div>
-        <Dialog open={userLoginOpen} disableEscapeKeyDown>
-        <DialogTitle>
-          Enter Your UserId
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            label="UserId"
-            value={userId}
-            onChange={handleUserIdChange}
-            fullWidth
-            sx={{ mt: 2 }} 
-            type="number"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={handleUserLogin} disabled={!userId.trim}>Sign In</Button>
-        </DialogActions>
-      </Dialog>
-      </div>
-    );
-  }
+  // if(!isLoggedIn) {
+  //   return (
+  //     <div>
+  //       <Dialog open={userLoginOpen} disableEscapeKeyDown>
+  //       <DialogTitle>
+  //         Enter Your UserId
+  //       </DialogTitle>
+  //       <DialogContent>
+  //         <TextField
+  //           label="UserId"
+  //           value={userId}
+  //           onChange={handleUserIdChange}
+  //           fullWidth
+  //           sx={{ mt: 2 }} 
+  //           type="number"
+  //         />
+  //       </DialogContent>
+  //       <DialogActions>
+  //         <Button variant="contained" onClick={handleUserLogin} disabled={!userId.trim}>Sign In</Button>
+  //       </DialogActions>
+  //     </Dialog>
+  //     </div>
+  //   );
+  // }
 
   // if (loading) {
   //   return <div>Loading calendar...</div>;
   // }
 
   return (
-    <>
+    // <>
       <div>
         <Paper sx={{ p: 2, mb: 2 }}>
           <h2>Workout Calendar</h2>
           <p>Schedule your routine and track completed workout</p>
-          <p>{userId}</p>
-          <Button
+          {/* <p>{userId}</p> */}
+          {/* <Button
             variant="outlined"
             size="small"
             onClick={() => {
@@ -650,7 +650,7 @@ const handleColorSave = async(color) => {
             }}
           >
             Change User
-          </Button>
+          </Button> */}
         </Paper>
 
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
@@ -849,7 +849,7 @@ const handleColorSave = async(color) => {
           </DialogActions>
         </Dialog>
       </div>
-    </>
+    // </>
   );
 }
 
