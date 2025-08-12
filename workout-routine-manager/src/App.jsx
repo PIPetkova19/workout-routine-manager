@@ -33,9 +33,9 @@ import {
 import { CreateListItem, BasicButton, iconMap } from "./views/theme/Theme";
 import VerifyUser from "./registration/VerifyUser";
 import GoogleCalendar from "./GoogleCalendar";
-import IntroPage from "./IntroPage";
 import ThemeToggle from "./components/ThemeToggle";
 import { useLocation } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const drawerWidth = 220;
 
@@ -58,197 +58,218 @@ export default function App() {
   const signOut = async () => {
     await handleSignOut();
   }
-  const { user } = use(AuthContext);
+
+  const { user, isLoading } = use(AuthContext);
   const location = useLocation();
   const isIntroPage = location.pathname === "/";
+  
+  //spinner
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-  return (
-    <Box sx={{ display: "flex", minHeight: "100%" }}>
-      <CssBaseline />
+  else {
+    return (
+      <Box sx={{ display: "flex", minHeight: "100%" }}>
+        <CssBaseline />
 
-      {user && (<>
-        <AppBar
-          position="fixed"
-          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <Toolbar
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              position: "relative",
-            }}
+        {user && (<>
+          <AppBar
+            position="fixed"
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           >
-            {isMobile && (
-              <IconButton
-                color="inherit"
-                onClick={() => setDrawerOpen((prev) => !prev)}
-                sx={{
-                  position: "absolute",
-                  left: 0,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
-            <Box
+            <Toolbar
               sx={{
-                position: "absolute",
-                left: "50%",
-                transform: "translateX(-50%)",
                 display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
-                gap: 1,
+                position: "relative",
               }}
             >
-              <FitBitIcon />
-              <Typography variant="h6" noWrap component="div">
-                Fitness Tracker
-              </Typography>
-            </Box>
-            <ThemeToggle />
-            {/*sign out*/}
-            <Box sx={{ marginLeft: "auto" }}>
-              <Button
-                variant="outlined"
-                onClick={signOut}
-                startIcon={<LogoutIcon />}
+              {isMobile && (
+                <IconButton
+                  color="inherit"
+                  onClick={() => setDrawerOpen((prev) => !prev)}
+                  sx={{
+                    position: "absolute",
+                    left: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
+              <Box
                 sx={{
-                  color: "white",
-                  borderColor: "white"
+                  position: "absolute",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
                 }}
               >
-                {!isSmallScreen && (
-                  <>
-                    <Typography> Sign out</Typography>
-                  </>
-                )}
-              </Button>
-            </Box>
+                <FitBitIcon />
+                <Typography variant="h6" noWrap component="div">
+                  Fitness Tracker
+                </Typography>
+              </Box>
+              <ThemeToggle />
+              {/*sign out*/}
+              <Box sx={{ marginLeft: "auto" }}>
+                <Button
+                  variant="outlined"
+                  onClick={signOut}
+                  startIcon={<LogoutIcon />}
+                  sx={{
+                    color: "white",
+                    borderColor: "white"
+                  }}
+                >
+                  {!isSmallScreen && (
+                    <>
+                      <Typography> Sign out</Typography>
+                    </>
+                  )}
+                </Button>
+              </Box>
 
-          </Toolbar>
-        </AppBar>
-      </>
-      )}
+            </Toolbar>
+          </AppBar>
+        </>
+        )}
 
-      {user && (<>
-        <Drawer
-          variant={isMobile ? "temporary" : "permanent"}
-          open={drawerOpen}
-          onClose={toggleDrawer(false)}
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
+        {user && (<>
+          <Drawer
+            variant={isMobile ? "temporary" : "permanent"}
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}
+            sx={{
               width: drawerWidth,
-              boxSizing: "border-box",
-            },
+              flexShrink: 0,
+              [`& .MuiDrawer-paper`]: {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+            }}
+          >
+
+            <Toolbar />
+            <Box onClick={toggleDrawer(false)} sx={{ overflow: "auto" }}>
+              <List>
+                <Link to={"/"}>
+                  <CreateListItem iconName="Dashboard" text="Dashboard" />
+                </Link>
+                <Link to={"/routines"}>
+                  <CreateListItem iconName="Routines" text="Routines" />
+                </Link>
+                <Link to={"/assistant"}>
+                  <CreateListItem iconName="Assistant" text="AI Assistant" />
+                </Link>
+
+                {user.user_metadata.iss === "https://accounts.google.com"
+                  ?
+                  (<Link to={"/googleCalendar"}>
+                    <CreateListItem iconName="Calendar" text="Google Calendar" />
+                  </Link>
+                  )
+                  :
+                  (<Link to={"/calendar"}>
+                    <CreateListItem iconName="Calendar" text="Calendar" />
+                  </Link>
+                  )
+                }
+              </List>
+            </Box>
+            <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
+              <Divider />
+              <List sx={{ display: "flex", justifyContent: "center" }}>
+                <Link to={"/accsettings"}>
+                  <BasicButton iconName="Account" />
+                </Link>
+                <Link to={"/appsettings"}>
+                  <BasicButton iconName="Settings" />
+                </Link>
+              </List>
+            </Box>
+          </Drawer>
+        </>
+        )}
+
+        {/*change color of background for intro page and the other pages*/}
+        <Box
+          component="main"
+          sx={{
+            p: 3,
+            width: "100%",
+            backgroundColor:
+              isIntroPage
+                ? (user ? theme.palette.background.dashboard : theme.customShadows.background)
+                : theme.palette.background.main,
           }}
         >
-
           <Toolbar />
-          <Box onClick={toggleDrawer(false)} sx={{ overflow: "auto" }}>
-            <List>
-              <Link to={"/dashboard"}>
-                <CreateListItem iconName="Dashboard" text="Dashboard" />
-              </Link>
-              <Link to={"/routines"}>
-                <CreateListItem iconName="Routines" text="Routines" />
-              </Link>
 
-              <Link to={"/assistant"}>
-                <CreateListItem iconName="Assistant" text="AI Assistant" />
-              </Link>
-              {user.user_metadata.iss === "https://accounts.google.com" ?
-                (<Link to={"/googleCalendar"}>
-                  <CreateListItem iconName="Calendar" text="Google Calendar" />
-                </Link>
-                ) :
-                (<Link to={"/calendar"}>
-                  <CreateListItem iconName="Calendar" text="Calendar" />
-                </Link>)
-              }
-            </List>
-          </Box>
-          <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
-            <Divider />
-            <List sx={{ display: "flex", justifyContent: "center" }}>
-              <Link to={"/accsettings"}>
-                <BasicButton iconName="Account" />
-              </Link>
-              <Link to={"/appsettings"}>
-                <BasicButton iconName="Settings" />
-              </Link>
-            </List>
-          </Box>
-        </Drawer>
-      </>
-      )}
+          <Routes>
+            {/*without registration*/}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/signUp" element={<SignUp />} />
+            <Route path="/signIn" element={<SignIn />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
+            <Route path="/updateUser" element={<UpdateUser />} />
+            <Route path="/verifyUser" element={<VerifyUser />} />
 
-      <Box
-        component="main"
-        sx={{
-          p: 3,
-          width: "100%",
-            backgroundColor: isIntroPage
-          ? theme.customShadows.background
-          : theme.palette.background.main,
-        }}
-      >
-        <Toolbar />
+            {/*with registration*/}
+            <Route path="/routines" element={
+              <ProtectedRoute>
+                <Routines />
+              </ProtectedRoute>
+            } />
 
-        <Routes>
-          {/*without registration*/}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/" element={<IntroPage />} />
+            <Route path="/calendar" element={
+              <ProtectedRoute>
+                <Calendar />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/signUp" element={<SignUp />} />
-          <Route path="/signIn" element={<SignIn />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/updateUser" element={<UpdateUser />} />
-          <Route path="/verifyUser" element={<VerifyUser />} />
+            <Route path="/googleCalendar" element={
+              <ProtectedRoute>
+                <GoogleCalendar />
+              </ProtectedRoute>
+            } />
 
-          {/*with registration*/}
-          <Route path="/routines" element={
-            <ProtectedRoute>
-              <Routines />
-            </ProtectedRoute>
-          } />
+            <Route path="/assistant" element={
+              <ProtectedRoute>
+                <Assistant />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/calendar" element={
-            <ProtectedRoute>
-              <Calendar />
-            </ProtectedRoute>
-          } />
+            <Route path="/appsettings" element={
+              <ProtectedRoute>
+                <AppSettings />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/googleCalendar" element={
-            <ProtectedRoute>
-              <GoogleCalendar />
-            </ProtectedRoute>
-          } />
+            <Route path="/accsettings" element={
+              <ProtectedRoute>
+                <AccSettings />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/assistant" element={
-            <ProtectedRoute>
-              <Assistant />
-            </ProtectedRoute>
-          } />
-
-          <Route path="/appsettings" element={
-            <ProtectedRoute>
-              <AppSettings />
-            </ProtectedRoute>
-          } />
-
-          <Route path="/accsettings" element={
-            <ProtectedRoute>
-              <AccSettings />
-            </ProtectedRoute>
-          } />
-
-        </Routes>
+          </Routes>
+        </Box>
       </Box>
-    </Box>
-  );
+    );
+  }
 }

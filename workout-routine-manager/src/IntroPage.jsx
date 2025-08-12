@@ -121,18 +121,18 @@ export default function IntroPage() {
                             <FitBitIcon sx={{ fontSize: 60, color: theme.customShadows.text.primary }} />
                         </Box>
 
-                        <Box 
-                        sx={{
-                            color: theme.customShadows.primary
-                        }}> 
-                        Take control of your fitness
-                         </Box>
-                        <Box 
-                        sx={{ 
-                            color: theme.customShadows.text.primary
-                             }}>
-                                journey with our tracker
-                                </Box>
+                        <Box
+                            sx={{
+                                color: theme.customShadows.primary
+                            }}>
+                            Take control of your fitness
+                        </Box>
+                        <Box
+                            sx={{
+                                color: theme.customShadows.text.primary
+                            }}>
+                            journey with our tracker
+                        </Box>
                     </Typography>
 
                     <Typography
@@ -142,10 +142,10 @@ export default function IntroPage() {
                             mb: 4,
                             textTransform: "uppercase"
                         }}>
-                        <Grid container spacing={2} 
-                          sx={{
-                            color: theme.customShadows.primary
-                        }}>
+                        <Grid container spacing={2}
+                            sx={{
+                                color: theme.customShadows.primary
+                            }}>
                             <Grid>   Easily schedule workouts</Grid>
                             <Grid> log your sets and reps</Grid>
                             <Grid>  stay consistent</Grid>
@@ -196,9 +196,9 @@ export default function IntroPage() {
                         <Typography
                             variant="h6"
                             component="h2"
-                            sx={{ 
-                                mb: 4 ,
-                            color: theme.customShadows.secondary
+                            sx={{
+                                mb: 4,
+                                color: theme.customShadows.secondary
                             }}>
                             Designed to adapt perfectly to both mobile and desktop screens, ensuring ease of use everywhere.
                         </Typography>

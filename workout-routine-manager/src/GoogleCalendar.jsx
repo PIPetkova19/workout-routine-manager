@@ -12,6 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useTheme } from "@mui/material/styles";
 
 const routines = [
     { id: 1, name: "Leg Day", exnum: 5, details: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Leg Curls"] },
@@ -20,6 +21,7 @@ const routines = [
 ];
 
 function GoogleCalendar() {
+ const theme = useTheme();
     //selected date
     const [start, setStart] = useState(new Date());
     //all dates
@@ -86,7 +88,7 @@ function GoogleCalendar() {
 
     return (
         <>
-            <Box sx={{ backgroundColor: "white", mb: 2 }}>
+            <Box sx={{ backgroundColor:  theme.palette.background.paper, mb: 2 }}>
                 <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
                     Workout Calendar
                     <Typography variant="h6" component="div">
@@ -95,7 +97,7 @@ function GoogleCalendar() {
                 </Typography>
             </Box>
 
-            <Box sx={{ backgroundColor: "white" }}>
+            <Box sx={{ backgroundColor:  theme.palette.background.paper }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DateCalendar
                         value={start.toISOString()}

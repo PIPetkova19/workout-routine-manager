@@ -28,7 +28,7 @@ export const ThemeProvider = ({ children }) => {
 
   const theme = createTheme({
     palette: {
-      mode,
+      mode, 
       primary: {
         main: '#1976d2',
       },

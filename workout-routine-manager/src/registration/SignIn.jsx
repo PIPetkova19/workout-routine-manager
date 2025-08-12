@@ -99,6 +99,7 @@ function SignIn() {
                         <TextField
                             id="email"
                             name="email"
+                            type="email"
                             placeholder="your@email.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}

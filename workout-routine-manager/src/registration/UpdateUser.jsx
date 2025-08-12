@@ -19,7 +19,7 @@ function ResetPassword() {
     const { handleUserUpdate } = use(AuthContext);
 
     async function handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); 
         await handleUserUpdate(password);
         setPassword("");
     }
