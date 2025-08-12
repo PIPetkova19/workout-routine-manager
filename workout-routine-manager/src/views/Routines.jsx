@@ -1,22 +1,21 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import CreateRoutines from "../routines/CreateRoutines";
+import RoutinesList from "../routines/RoutinesList";
+import { use } from "react";
+import { Provider } from "react-redux";
+import { store } from "../utils/ReduxStore";
+import { AuthContext } from "../context/AuthContext";
 
-export default function Routines() {
+export default  function Routines() {
+  const {user} = use(AuthContext);
+
+console.log("user data: ", user.id);
   return (
     <Box>
-      <Box
-        sx={{
-          backgroundColor: "white",
-          borderRadius: 2,
-          mb: 2,
-          justifyContent: "left",
-          alignItems: "left",
-        }}
-      >
-        <Typography variant="h3">Welcome to your Routines!</Typography>
-        <Typography variant="subtitle1">
-          Create and manage your workout plans.
-        </Typography>
-      </Box>
+      <Provider store={store}>
+        <CreateRoutines loggedUserId={user.id} />
+        <RoutinesList loggedUserId={user.id} />
+      </Provider>
     </Box>
   );
 }
