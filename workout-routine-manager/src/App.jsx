@@ -61,7 +61,7 @@ export default function App() {
   const { user } = use(AuthContext);
   const location = useLocation();
   const isIntroPage = location.pathname === "/";
-  console.log(isIntroPage);
+
   return (
     <Box sx={{ display: "flex", minHeight: "100%" }}>
       <CssBaseline />
@@ -151,7 +151,7 @@ export default function App() {
           <Toolbar />
           <Box onClick={toggleDrawer(false)} sx={{ overflow: "auto" }}>
             <List>
-              <Link to={"/"}>
+              <Link to={"/dashboard"}>
                 <CreateListItem iconName="Dashboard" text="Dashboard" />
               </Link>
               <Link to={"/routines"}>
@@ -201,8 +201,8 @@ export default function App() {
 
         <Routes>
           {/*without registration*/}
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/introPage" element={<IntroPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<IntroPage />} />
 
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />

@@ -70,7 +70,7 @@ function AuthProvider({ children }) {
             setUser(data?.user);
             alert("Sign in successful");
             //navigate to home page
-            navigate("/");
+            navigate("/dashboard");
 
         }
         catch (error) {
@@ -155,7 +155,7 @@ function AuthProvider({ children }) {
             if (error) { throw error; }
             alert("Verification successful");
             setUser(data?.user);
-            navigate("/");
+            navigate("/dashboard");
         }
 
         catch (error) {

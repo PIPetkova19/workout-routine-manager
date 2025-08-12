@@ -66,6 +66,7 @@ function SignUp() {
     //google sign up
     const signUpGoogle = async () => {
         await handleSignUpGoogle();
+        navigate("/dashboard");
     }
 
     return (
