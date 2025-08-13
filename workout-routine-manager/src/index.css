@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'Albert Sans';
+  src: url(/public/fonts/Albert_Sans/AlbertSans-VariableFont_wght.ttf) ;
+}
+
+@font-face {
+  font-family: 'Darker Grotesque';
+  src: url(/public/fonts/Darker_Grotesque/DarkerGrotesque-VariableFont_wght.ttf) ;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -66,3 +76,4 @@ button:focus-visible {
 * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+

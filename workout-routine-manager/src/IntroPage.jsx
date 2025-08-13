@@ -14,34 +14,38 @@ export default function IntroPage() {
     return (
         <>
             {/*navbar*/}
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar sx={{
-                    boxShadow: "none",
-                    borderBottom: "none",
-                    backgroundColor: theme.customShadows.background,
-                    backdropFilter: "blur(10px)"
-                }}>
-                    <Toolbar sx={{
-                        position: "sticky",
-                        top: 0,
-                        overflow: "hidden"
+            <Box >
+                <AppBar
+                    sx={{
+                        boxShadow: "none",
+                        borderBottom: "none",
+                        backgroundColor: theme.customShadows.background,
+                        backdropFilter: "blur(10px)"
                     }}>
+                    <Toolbar
+                        sx={{
+                            position: "sticky",
+                            top: 0,
+                            overflow: "hidden"
+                        }}>
                         <Box sx={{ flexGrow: 5 }}>
                             <Box display="flex" alignItems="center">
                                 {/*icon*/}
                                 <FitBitIcon
-                                    fontSize="medium"
-                                    sx={{ color: theme.customShadows.text.primary }}
-                                />
+                                    sx={{
+                                        color: theme.customShadows.text.primary
+                                    }} />
                                 <Typography
                                     variant="h5"
                                     component="div"
                                     sx={{
                                         ml: 1,
-                                        color: theme.customShadows.text.primary,
-                                        fontWeight: "bold"
+                                        fontFamily: "Darker Grotesque",
+                                        background: "linear-gradient(90deg,rgba(11, 64, 117, 1) 0%, rgba(19, 133, 168, 1) 50%, rgba(25, 118, 210, 1) 100%)",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent"
                                     }}>
-                                    FT
+                                    Fitness Tracker
                                 </Typography>
                             </Box>
                         </Box>
@@ -54,11 +58,17 @@ export default function IntroPage() {
                                 sx={{
                                     textDecoration: "none",
                                     borderRadius: "8px",
+                                    fontSize: {
+                                       xs: '0.6rem',
+                                        sm: '0.8rem',
+                                        md: '0.8rem',
+                                        lg: '1rem',
+                                        xl: '1rem',
+                                    },
                                     "&:hover": {
                                         backgroundColor: theme.customShadows.background,
                                     }
-                                }}
-                            >
+                                }} >
                                 Sign in
                             </Button>
 
@@ -71,12 +81,18 @@ export default function IntroPage() {
                                     backgroundColor: theme.customShadows.text.primary,
                                     color: "white",
                                     borderRadius: "8px",
+                                    fontSize: {
+                                        xs: '0.6rem',
+                                        sm: '0.8rem',
+                                        md: '0.8rem',
+                                        lg: '1rem',
+                                        xl: '1rem',
+                                    },
                                     "&:hover": {
                                         backgroundColor: theme.customShadows.text.secondary,
                                         color: "white"
                                     }
-                                }}
-                            >
+                                }}>
                                 Sign up
                             </Button>
                         </Box>
@@ -86,8 +102,7 @@ export default function IntroPage() {
 
             <Grid
                 container
-                spacing={15}
-                direction="column"
+                spacing={5}
                 sx={{
                     height: '100%',
                     width: '100%',
@@ -96,11 +111,11 @@ export default function IntroPage() {
 
                 {/*text*/}
                 <Grid
-                    xs={12}
+                    size={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'center',
+                        justifyContent: 'flex-start',
                         alignItems: 'center',
                         textAlign: 'center',
                         padding: 10,
@@ -113,12 +128,29 @@ export default function IntroPage() {
                         component="h2"
                         sx={{
                             fontWeight: "bold",
-                            fontFamily: "Arial",
-                            mb: 4
+                            mb: 4,
+                            fontFamily: "Albert Sans",
+                            fontSize: {
+                                xs: '2rem',
+                                sm: '3rem',
+                                md: '3.2rem',
+                                lg: '3.5rem',
+                                xl: '4rem',
+                            },
                         }}>
 
                         <Box sx={{ textAlign: "center" }}>
-                            <FitBitIcon sx={{ fontSize: 60, color: theme.customShadows.text.primary }} />
+                            <FitBitIcon
+                                sx={{
+                                    fontSize: {
+                                        xs: '30px',
+                                        sm: '50px',
+                                        md: '50px',
+                                        lg: '50px',
+                                        xl: '60px',
+                                    },
+                                    color: theme.customShadows.text.primary
+                                }} />
                         </Box>
 
                         <Box
@@ -136,20 +168,29 @@ export default function IntroPage() {
                     </Typography>
 
                     <Typography
-                        variant="subtitle1"
+                        variant="h5"
                         component="h2"
                         sx={{
                             mb: 4,
-                            textTransform: "uppercase"
+                            textTransform: "uppercase",
+                            fontSize: {
+                                xs: '0.8rem',
+                                sm: '1.2rem',
+                                md: '1.2rem',
+                                lg: '1.2rem',
+                                xl: '1.5rem',
+                            },
                         }}>
-                        <Grid container spacing={2}
+                        <Box
                             sx={{
-                                color: theme.customShadows.primary
+                                color: theme.customShadows.primary,
+                                fontFamily: "Darker Grotesque",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center"
                             }}>
-                            <Grid>   Easily schedule workouts</Grid>
-                            <Grid> log your sets and reps</Grid>
-                            <Grid>  stay consistent</Grid>
-                        </Grid>
+                            Easily schedule workouts • log your sets and reps • stay consistent
+                        </Box>
                     </Typography>
 
                     <Box>
@@ -162,51 +203,68 @@ export default function IntroPage() {
                                 backgroundColor: theme.customShadows.text.primary,
                                 color: "white",
                                 borderRadius: "20px",
+                                fontSize: {
+                                    xs: '0.6rem',
+                                    sm: '0.8rem',
+                                    md: '0.8rem',
+                                    lg: '1rem',
+                                    xl: '1.2rem',
+                                },
                                 "&:hover": {
                                     backgroundColor: theme.customShadows.text.secondary,
                                     color: "white"
                                 }
-                            }}
-                        >
+                            }}>
                             Sign up
                         </Button>
                     </Box>
                 </Grid>
 
                 {/*pic*/}
-                <Grid xs={8}
+                <Grid size={{ xs: 12, sm: 12 }}
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                         textAlign: 'center',
-                        minHeight: '400px',
+                        minHeight: '200px',
                         position: "sticky",
                         top: 0,
                         zIndex: 2,
                     }}>
                     <Box sx={{
                         background: "linear-gradient(90deg, rgba(25, 118, 210, 0.83) 0%, rgba(25, 167, 210, 0.69) 50%, rgba(25, 118, 210, 0.74) 100%)",
-                        paddingLeft: 30,
-                        paddingRight: 30,
-                        paddingBottom: 5,
-                        paddingTop: 10,
+                        padding: {
+                            xs: '10px 20px',
+                            sm: '20px 50px',
+                            md: '20px 60px',
+                            lg: '35px 100px',
+                            xl: '50px 100px'
+                        },
                         backdropFilter: "blur(10px)"
                     }}>
                         <Typography
-                            variant="h6"
+                            variant="h5"
                             component="h2"
                             sx={{
+                                fontSize: {
+                                    xs: '1rem',
+                                    sm: '1.2rem',
+                                    md: '1.3rem',
+                                    lg: '1.5rem',
+                                    xl: '1.5rem',
+                                },
                                 mb: 4,
-                                color: theme.customShadows.secondary
-                            }}>
+                                color: theme.customShadows.secondary,
+                                fontFamily: "Darker Grotesque"
+                            }} >
                             Designed to adapt perfectly to both mobile and desktop screens, ensuring ease of use everywhere.
                         </Typography>
                         <img src="/images/tabletPhone.png" alt="Tablet"
                             style={{ maxWidth: "100%", height: "auto" }} />
                     </Box>
                 </Grid>
-            </Grid>
+            </Grid >
         </>
     );
 }
