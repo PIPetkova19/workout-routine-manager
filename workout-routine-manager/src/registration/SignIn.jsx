@@ -13,6 +13,7 @@ import { styled } from '@mui/material/styles';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import HttpsIcon from '@mui/icons-material/Https';
+import { useTheme } from "@mui/material/styles";
 
 /*ENTER AN EXISTING ACCOUNT*/
 
@@ -27,6 +28,7 @@ const FirstLetter = styled('span')({
 });
 
 function SignIn() {
+    const theme = useTheme();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { handleSignIn, handleForgottenPassword } = use(AuthContext);
@@ -38,9 +40,9 @@ function SignIn() {
 
     return (
         <Box component="form"
-            onSubmit={handleSubmit} 
+            onSubmit={handleSubmit}
             sx={{
-               height: "90%",
+                height: "90%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -59,29 +61,32 @@ function SignIn() {
                     },
                     minWidth: '200px',
                     maxWidth: '1200px',
-        
+
                     minHeight: '200px',
                     padding: {
                         xs: '30px 16px',
                         sm: '50px 20px',
                     },
-                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;",
+                    boxShadow: theme.customShadows.card,
                     borderRadius: "5px",
                 }}
             >
                 <Box>
-                    <Typography variant="h3" component="h1" color="primary"
-                        sx={{ fontWeight: "bold" }}>
+                    <Typography variant="h3" component="h1"
+                        sx={{
+                            fontWeight: "bold",
+                            color: theme.palette.primary.main
+                        }}>
                         Sign In
                     </Typography>
                 </Box>
 
                 <Box>
                     <Box>
-                        <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                        <Typography variant="subtitle1" component="p" sx={{ color: theme.palette.text.secondary }}>
                             Glab to see you again👋
                         </Typography>
-                        <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                        <Typography variant="subtitle1" component="p" sx={{ color: theme.palette.text.secondary }}>
                             Sign in to your account below.
                         </Typography>
                     </Box>
@@ -94,6 +99,7 @@ function SignIn() {
                         <TextField
                             id="email"
                             name="email"
+                            type="email"
                             placeholder="your@email.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -121,7 +127,7 @@ function SignIn() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                                //password icon
+                            //password icon
                             slotProps={{
                                 input: {
                                     startAdornment: (
@@ -151,12 +157,17 @@ function SignIn() {
                 </Box>
 
                 <Divider>
-                    <Typography sx={{ color: "rgba(52, 52, 52, 1)" }}>or</Typography>
+                    <Typography sx={{ color: theme.palette.text.secondary }}>or</Typography>
                 </Divider>
 
                 {/*Sign up link*/}
                 <Box>
-                    <Typography variant="subtitle2" component="p" sx={{ textAlign: "center", color: "rgba(52, 52, 52, 1)" }}>                            Don't have an account?{' '}
+                    <Typography variant="subtitle2" component="p"
+                        sx={{
+                            textAlign: "center",
+                            color: theme.palette.text.primary
+                        }}>
+                        Don't have an account?{' '}
                         <Link to="/signUp" style={{ fontWeight: "bold", textDecoration: "none" }}>
                             Sign Up
                         </Link>

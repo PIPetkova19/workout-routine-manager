@@ -9,15 +9,17 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { use, useState } from 'react';
 import HttpsIcon from '@mui/icons-material/Https';
+import { useTheme } from "@mui/material/styles";
 
 //update password when forgotten
 
 function ResetPassword() {
+    const theme = useTheme();
     const [password, setPassword] = useState("");
     const { handleUserUpdate } = use(AuthContext);
 
     async function handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); 
         await handleUserUpdate(password);
         setPassword("");
     }
@@ -50,20 +52,23 @@ function ResetPassword() {
                         xs: '30px 16px',
                         sm: '50px 20px',
                     },
-                    boxShadow: " rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;",
+                    boxShadow: theme.customShadows.card,
                     borderRadius: "5px",
                 }}
             >
 
                 <Box>
                     <Typography variant="h3" component="h1" color="primary"
-                        sx={{ fontWeight: "bold" }}>
+                        sx={{ fontWeight: "bold",
+                            color: theme.palette.primary.main
+                         }}>
                         Renew your password
                     </Typography>
                 </Box>
 
                 <Box>
-                    <Typography variant="subtitle1" component="p" sx={{ color: "rgba(52, 52, 52, 1)" }}>
+                    <Typography variant="subtitle1" component="p"
+                     sx={{   color: theme.palette.text.secondary}}>
                         Update your password.
                     </Typography>
                 </Box>

@@ -7,14 +7,18 @@ export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         //function that checks if there is an active session on INITIAL load
         const getSession = async () => {
+            setIsLoading(true);
             const { data: { session } } = await supabase.auth.getSession();
             //if there is no session the user is set to null
             setUser(session?.user ?? null);
+            setIsLoading(false);
         };
         getSession();
 
@@ -29,6 +33,7 @@ function AuthProvider({ children }) {
     //sign up otp
     async function handleSignUpWithOtp(email) {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.signInWithOtp({
                 email,
                 options: {
@@ -37,20 +42,22 @@ function AuthProvider({ children }) {
             });
 
             if (error) { throw error; }
-
             alert("Email sent");
             navigate("/verifyUser");
         }
-
         catch (error) {
             console.error(error);
             alert(error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
     //creating a new account
     const handleSignUp = async (email, password) => {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.signUp({ email, password });
             if (error) { throw error; }
             await handleSignUpWithOtp(email);
@@ -59,14 +66,17 @@ function AuthProvider({ children }) {
             console.error(error);
             alert(error.message);
         }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     //enter an existing account
     const handleSignIn = async (email, password) => {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) { throw error; }
-
             setUser(data?.user);
             alert("Sign in successful");
             //navigate to home page
@@ -77,26 +87,32 @@ function AuthProvider({ children }) {
             console.error(error);
             alert(error.message);
         }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     //sign out
     const handleSignOut = async () => {
         try {
+            setIsLoading(true);
             const { error } = await supabase.auth.signOut();
             if (error) { throw error; }
-            //navigate to signIn
-            navigate("/signIn");
             setUser(null);
         }
         catch (error) {
             console.error(error);
             alert(error.message);
         }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     //sign up with google
     const handleSignUpGoogle = async () => {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
@@ -111,11 +127,15 @@ function AuthProvider({ children }) {
             console.error(error);
             alert(error.message);
         }
+        finally {
+            setIsLoading(false);
+        }
     }
 
     //forgotten pass
     const handleForgottenPassword = async (email) => {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
                 //link to update user page
                 redirectTo: 'http://localhost:5173/updateUser',
@@ -124,16 +144,19 @@ function AuthProvider({ children }) {
             if (error) { throw error; }
             alert("Email sent!");
         }
-
         catch (error) {
             console.error(error);
             alert(error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
     //update user pass
     const handleUserUpdate = async (password) => {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.updateUser({ password });
             if (error) { throw error; }
             alert("User update successfully!");
@@ -141,32 +164,37 @@ function AuthProvider({ children }) {
             //navigate to sign in
             navigate("/signIn");
         }
-
         catch (error) {
             console.error(error);
             alert(error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
     //verify otp
     const handleVerifyOtp = async (email, token) => {
         try {
+            setIsLoading(true);
             const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
             if (error) { throw error; }
             alert("Verification successful");
             setUser(data?.user);
             navigate("/");
         }
-
         catch (error) {
             console.error(error);
             alert(error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <AuthContext value={{
-            user, handleSignIn, handleSignOut, handleSignUp,
+            user, isLoading, handleSignIn, handleSignOut, handleSignUp,
             handleSignUpGoogle, handleForgottenPassword, handleUserUpdate,
             handleSignUpWithOtp, handleVerifyOtp
         }}>

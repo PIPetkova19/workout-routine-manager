@@ -15,7 +15,7 @@ export default function Dashboard() {
         {/*if user is logged in*/}
         <Box>
           <Box sx={{
-           backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.background.paper,
             borderRadius: 2,
             mb: 2,
             justifyContent: "left",
