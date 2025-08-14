@@ -1,6 +1,5 @@
 import { Box, Typography, Grid } from "@mui/material";
 import { BarsDataset, CreateCard } from "./theme/Theme";
-import { fitnessData } from "../dataMockUp/data";
 import { GetCalendar } from "../utilities/GetCalendar";
 import { GetRountines } from "../utilities/GetRoutines";
 import { calculateAndSetWorkoutFrequencyData, calculateDifference, calculateStreak, calculateTotalVolumeLifted, calculateWeekActivity, calculateWorkoutsThisMonth, setStreakSubtext } from "../utilities/helperFunctions";
@@ -76,7 +75,7 @@ export default function Dashboard() {
     });
     totalVolumeLifted = calculateTotalVolumeLifted(exThisMonth.exercises);
   }
-  
+
   return (
     <Box>
       <Box
