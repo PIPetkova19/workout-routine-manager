@@ -4,6 +4,9 @@ import { GetCalendar } from "../utilities/GetCalendar";
 import { GetRountines } from "../utilities/GetRoutines";
 import { calculateAndSetWorkoutFrequencyData, calculateDifference, calculateStreak, calculateTotalVolumeLifted, calculateWeekActivity, calculateWorkoutsThisMonth, setStreakSubtext } from "../utilities/helperFunctions";
 import { GetRountineDate } from "../utilities/GetRoutineDates";
+import { AuthContext } from "../context/AuthContext";
+import { use } from 'react';
+import IntroPage from "../IntroPage";
 
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
@@ -15,6 +18,9 @@ const dataToShow = [
 ];
 
 export default function Dashboard() {
+  const { user } = use(AuthContext);
+  const theme = useTheme();
+
   const { calendarError, calendarData } = GetCalendar();
   const { routinesError, routinesData } = GetRountines();
   const { routineDateError, routineDateData } = GetRountineDate();
@@ -77,6 +83,8 @@ export default function Dashboard() {
   }
 
   return (
+     user ?
+     <>
     <Box>
       <Box
         sx={{
@@ -157,5 +165,11 @@ export default function Dashboard() {
         <Grid container spacing={2}></Grid>
       </Box>
     </Box>
+    </>
+    :
+      <>
+        {/*if user is logged out*/}
+        <IntroPage />
+      </>
   );
 }
