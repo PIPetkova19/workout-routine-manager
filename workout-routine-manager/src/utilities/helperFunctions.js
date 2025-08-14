@@ -1,8 +1,16 @@
-export function calculateWorkouts(data, currentMonth){
+import { isAfter, isSameWeek, isThisMonth} from "date-fns";
+import { Workouts } from "./helperClasses";
+
+export function calculateWorkoutsThisMonth(data, currentDate){
+
   let count = 0;
+
   data.forEach(element => {
-    const month = new Date(element.date).getMonth()
-    if(month === currentMonth){
+    let date = new Date(element.date);
+    let checkMonth = isThisMonth(date);
+    let checkDay = isAfter(date, currentDate);
+    
+    if(checkMonth && !checkDay){
       count++;
     }
   });
@@ -70,8 +78,6 @@ export function calculateStreak(data, currentMonth, currentYear, currentDay){
       helpArray.push(day);
     }
   });
-
-  console.log(helpArray);
   
   helpArray.sort((a, b) => a - b);
 
@@ -90,7 +96,58 @@ export function calculateStreak(data, currentMonth, currentYear, currentDay){
   return streak;
 }
 
-export function streakSubtext(count){
+export function calculateTotalVolumeLifted(data){
+  let count = 0;
+
+  data.forEach(element => {
+    count += Number(element.weight);    
+  });
+  
+  return count;
+}
+
+export function calculateWeekActivity(currentDate, data){
+  let count = 0;
+
+  data.forEach(element => {
+    let date = new Date(element.date)
+    let checkWeek = isSameWeek(currentDate, date, {weekStartsOn: 1});
+    let checkDay = isAfter(date, currentDate);
+    if(checkWeek && !checkDay){
+      count++;
+    };
+  });
+
+  return count;
+}
+
+export function calculateAndSetWorkoutFrequencyData(data, currentDate){
+  const dataset = [];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+  const currentMonth = currentDate.getMonth();
+  for(let i = 0; i <= currentMonth; i++){
+    dataset.push(new Workouts(i, months[i], 0));
+  }
+
+  data.forEach(element => {
+    let date = new Date(element.date);
+    let month = date.getMonth();
+    let checkDay = isAfter(date, currentDate);
+
+    if(!checkDay){
+      dataset.forEach(m => {
+      if(m.n === month){
+        m.workoutFrequency++;
+      }
+    });
+    }
+  });
+
+  return dataset;
+}
+
+export function setStreakSubtext(count){
     if(count === 0){
         return "C'mon you can do this!";
     } else if (count > 0 && count <= 3){
