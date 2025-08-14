@@ -10,6 +10,8 @@ import {
   Typography
 } from "@mui/material";
 
+import { BarChart } from "@mui/x-charts";
+
 import {
   SpaceDashboardTwoTone,
   FitnessCenterTwoTone,
@@ -81,16 +83,31 @@ export function BasicButton({ iconName }) {
   );
 }
 
-export function CreateCard({ text, data }){
+export function CreateCard({ text, data, subText="", width = "100%" }) {
   return (
-    <Card >
-      <CardContent >
-        <Typography variant="h6">
-          {text}
-        </Typography>
+    <Card sx={{ height: "95%" }}>
+      <CardContent>
+        <Typography variant="h6">{text}</Typography>
+        <Typography variant="h4">{data}</Typography>
+        <Typography variant="body2">{subText}</Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function BarsDataset({ data, toShow, keyProp, name = 'This is Chart' }) {
+  return (
+    <Card>
+      <CardContent>
         <Typography variant="h4">
-          {data}
+          {name}
         </Typography>
+        <BarChart
+          dataset={data}
+          xAxis={[{ dataKey: keyProp }]}
+          height="250"
+          series={toShow}
+        />
       </CardContent>
     </Card>
   );
