@@ -44,7 +44,7 @@ const ThemeToggle = () => {
           borderRadius: '50%',
           backgroundColor: mode === 'light' ? '#1976d2' : '#ffffff',
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+          boxShadow: '0 2px 4px rgba(233, 16, 16, 0.2)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

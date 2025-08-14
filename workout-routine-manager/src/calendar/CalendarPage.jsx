@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { LocalizationProvider, StaticDatePicker, PickersDay } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"; 
 import { TextField, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Button, Paper } from "@mui/material";
@@ -25,6 +25,10 @@ import { enGB } from 'date-fns/locale';
 // import IconButton from "@mui/material/IconButton";
 // import ImputAdornment from "@mui/material/InputAdornment";
 import emailjs from '@emailjs/browser';
+import { useSelector } from "react-redux";
+import { store } from "../utils/ReduxStore";
+import DetailsIcon from "../components/icons/DetailsIcon";
+import EditDialogForm from "../components/EditDialogForm";
 
 // const routines = [
 //   { id: 1, name: "Leg Day", exnum: 5, details: ["Squats", "Lunges", "Leg Press", "Calf Raises", "Leg Curls"] },
@@ -62,7 +66,7 @@ const getDateKey = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-export default function CalendarPage() {
+export default function CalendarPage({ loggedUserId }) {
   const [selected, setSelected] = useState({});
   const [calendarDates, setCalendarDates] = useState([]); 
   const [routines, setRoutines] = useState([]);
@@ -88,7 +92,7 @@ export default function CalendarPage() {
       //   return;
       // }
       try {
-        setLoading(true);
+        // setLoading(true);
         //const userIdInt = parseInt(userId);
         const { data: calendarData, error: calendarError } = await supabase
           .from('routine_date')
@@ -102,10 +106,11 @@ export default function CalendarPage() {
             routines!inner (
               id,
               routineName,
-              exercise
+              exercise,
+              user_id
             )
           `)
-          // .eq('user_id', userIdInt);
+          .eq('routines.user_id', loggedUserId);
 
         if (calendarError) {
           console.error('Error fetching calendar dates:', calendarError);
@@ -115,7 +120,8 @@ export default function CalendarPage() {
         }
         const { data: allRoutines, error: routinesError } = await supabase
           .from('routines')
-          .select('*');
+          .select('*')
+          .eq('user_id', loggedUserId);
 
         if (routinesError) {
           console.error('Error fetching routines:', routinesError);
@@ -125,14 +131,19 @@ export default function CalendarPage() {
         const {data: routineColors, error: colorsError} = await supabase
           .from('routine_colors')
           .select('*')
-          //.eq('user_id', userIdInt);
+          //.eq('routines.user_id', loggedUserId);
 
-          if(!colorsError && routineColors) {
-            const colorsMap = {};
-            routineColors.forEach(item => {
-              colorsMap[item.routine_id] = item.color;
-              colorsMap[String(item.routine_id)] = item.color;
-            });
+          if (!colorsError && routineColors && allRoutines) {
+            const userRoutineIds = allRoutines.map(routine => routine.id);
+            const userColors = routineColors.filter(color =>
+              userRoutineIds.includes(color.routine_id)
+            );
+            if (!colorsError && userColors) {
+              const colorsMap = {};
+              userColors.forEach(item => {
+                colorsMap[item.routine_id] = item.color;
+                colorsMap[String(item.routine_id)] = item.color;
+              });
             setRoutineColors(colorsMap);
             console.log('Initial routine colors loaded:', colorsMap);
           }
@@ -165,7 +176,8 @@ export default function CalendarPage() {
           }));
           setRoutines(formattedRoutines);
         }
-        } catch (error) { console.error('Error:', error);
+        }
+       } catch (error) { console.error('Error:', error);
       } finally { setLoading(false); }
     };
     fetchCalendarData();
@@ -267,7 +279,7 @@ const handleRoutineChange = (e) => {
             exercise
           )
         `)
-        // .eq('user_id', userIdInt);
+        .eq('routines.user_id', loggedUserId);
 
       if (calendarError) {
         console.error('Error fetching calendar data:', calendarError);
@@ -277,16 +289,28 @@ const handleRoutineChange = (e) => {
       const { data: routineColorsData, error: colorsError } = await supabase
       .from('routine_colors')
       .select('*')
-      // .eq('user_id', userIdInt);
+      //.eq('routines.user_id', loggedUserId);
 
     if (!colorsError && routineColorsData) {
-      const colorsMap = {};
-      routineColorsData.forEach(item => {
-      colorsMap[item.routine_id] = item.color;
-      colorsMap[String(item.routine_id)] = item.color; 
-      });
-      setRoutineColors(colorsMap);
-      console.log('Updated routine colors:', colorsMap);
+      const { data: userRoutines } = await supabase
+        .from('routines')
+        .select('id')
+        .eq('user_id', loggedUserId);
+
+      if (userRoutines) {
+        const userRoutineIds = userRoutines.map(routine => routine.id);
+        const userColors = routineColorsData.filter(color => 
+          userRoutineIds.includes(color.routine_id)
+        );
+
+        const colorsMap = {};
+        userColors.forEach(item => {
+          colorsMap[item.routine_id] = item.color;
+          colorsMap[String(item.routine_id)] = item.color;
+        });
+        setRoutineColors(colorsMap);
+        console.log('Updated routine colors:', colorsMap);
+      }
     }
 
       if (calendarData && calendarData.length > 0) {
@@ -379,7 +403,7 @@ const handleRoutineChange = (e) => {
         .from('routine_date')
         .select('*')
         .eq('date_id', calendarId)
-        //.eq('user_id', userIdInt)
+        //.eq('routines.user_id', loggedUserId)
         .maybeSingle(); 
 
       if (routineDateError && routineDateError.code !== 'PGRST116') {
@@ -393,7 +417,7 @@ const handleRoutineChange = (e) => {
           .from('routine_date')
           .update({ routine_id: selectedRoutineId })
           .eq('date_id', calendarId)
-          //.eq('user_id', userIdInt);
+          //.eq('routines.user_id', loggedUserId);
 
         if (updateError) {
           console.error('Error updating routine_date entry:', updateError);
@@ -479,7 +503,7 @@ const handleRoutineChange = (e) => {
         .from('routine_date')
         .delete()
         .eq('date_id', calendarData.id)
-        //.eq('user_id', userIdInt);
+        //.eq('routines.user_id', loggedUserId);
 
       if (deleteError) {
         console.error('Error removing routine:', deleteError);
@@ -549,7 +573,7 @@ const handleColorSave = async(color) => {
   try {
     const {data: existing, error: checkError } =await supabase
     .from('routine_colors').select('*').eq('routine_id', selectedRoutineForColor.id)
-    //.eq('user_id', userIdInt)
+    //.eq('routines.user_id', loggedUserId)
     .maybeSingle();
 
     if(checkError) {
@@ -563,7 +587,7 @@ const handleColorSave = async(color) => {
     // .update({color: color})
     .update({color: colorName})
     .eq('routine_id', selectedRoutineForColor.id)
-    //.eq('user_id', userIdInt);
+    //.eq('routines.user_id', loggedUserId);
 
     if(updateError) {
       console.error('Error updating color: ', updateError);

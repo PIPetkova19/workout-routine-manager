@@ -2,14 +2,12 @@ import { use, useState } from "react";
 import { AuthContext } from "./context/AuthContext"
 import "./App.css";
 import Dashboard from "./views/Dashboardd";
-import Calendar from "./views/CalendarPage";
+import Calendar from "./calendar/Calendar";
 import Assistant from "./views/Assistant";
 import { Routes, Route, Link } from "react-router-dom";
 import Routines from "./views/Routines";
 import AppSettings from "./views/AppSettings";
 import AccSettings from "./views/AccSettings";
-import ResetPassword from "./ResetPassword";
-import UpdateUser from "./UpdateUser";
 import ResetPassword from "./registration/ResetPassword";
 import UpdateUser from "./registration/UpdateUser";
 import SignUp from "./registration/SignUp"
