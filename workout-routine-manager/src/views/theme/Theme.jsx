@@ -5,6 +5,8 @@ import {
   ListItemText,
   Button,
   Card,
+  CardContent,
+  Typography,
   useTheme,
   CardContent,
   Typography
@@ -47,9 +49,13 @@ export function CreateListItem({ iconName, text }) {
           borderRadius: 3,
           boxShadow: 3,
           backgroundColor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
+            transform: 'translateY(-2px)',
+            boxShadow: 6,
           },
+          transition: 'all 0.2s ease-in-out',
         }}
       >
         <ListItemIcon sx={{ minWidth: 32, mr: 1 }}>
@@ -75,7 +81,9 @@ export function BasicButton({ iconName }) {
         '&:hover': {
           borderColor: theme.palette.primary.dark,
           backgroundColor: theme.palette.action.hover,
+          transform: 'translateY(-1px)',
         },
+        transition: 'all 0.2s ease-in-out',
       }}
     >
       <IconComponent />
@@ -83,6 +91,7 @@ export function BasicButton({ iconName }) {
   );
 }
 
+<<<<<<< Updated upstream
 export function CreateCard({ text, data, subText="", width = "100%" }) {
   return (
     <Card sx={{ height: "95%" }}>
@@ -90,6 +99,29 @@ export function CreateCard({ text, data, subText="", width = "100%" }) {
         <Typography variant="h6">{text}</Typography>
         <Typography variant="h4">{data}</Typography>
         <Typography variant="body2">{subText}</Typography>
+=======
+export function CreateCard({ text, data }){
+  const theme = useTheme();
+  
+  return (
+    <Card sx={{ 
+      backgroundColor: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+      boxShadow: 2,
+      '&:hover': {
+        boxShadow: 4,
+        transform: 'translateY(-2px)',
+      },
+      transition: 'all 0.2s ease-in-out',
+    }}>
+      <CardContent sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ color: theme.palette.text.secondary, mb: 1 }}>
+          {text}
+        </Typography>
+        <Typography variant="h4" sx={{ color: theme.palette.text.primary, fontWeight: 'bold' }}>
+          {data}
+        </Typography>
+>>>>>>> Stashed changes
       </CardContent>
     </Card>
   );

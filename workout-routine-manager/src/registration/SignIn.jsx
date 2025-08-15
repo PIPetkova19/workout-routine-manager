@@ -13,14 +13,18 @@ import { styled } from '@mui/material/styles';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import HttpsIcon from '@mui/icons-material/Https';
+<<<<<<< Updated upstream
 import { useTheme } from "@mui/material/styles";
+=======
+import { useTheme } from '@mui/material/styles';
+>>>>>>> Stashed changes
 
 /*ENTER AN EXISTING ACCOUNT*/
 
-const StyledButton = styled(Button)({
+const StyledButton = styled(Button)(({ theme }) => ({
     textTransform: "lowercase",
     borderRadius: "9px",
-});
+}));
 
 const FirstLetter = styled('span')({
     textTransform: "uppercase",
@@ -47,6 +51,7 @@ function SignIn() {
                 justifyContent: "center",
                 alignItems: "center",
                 textAlign: "left",
+                backgroundColor: theme.palette.background.default,
             }}>
 
             <Stack
@@ -67,8 +72,16 @@ function SignIn() {
                         xs: '30px 16px',
                         sm: '50px 20px',
                     },
+<<<<<<< Updated upstream
                     boxShadow: theme.customShadows.card,
+=======
+                    backgroundColor: theme.palette.background.paper,
+                    boxShadow: theme.palette.mode === 'light' 
+                        ? "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
+                        : "rgba(255, 255, 255, 0.16) 0px 3px 6px, rgba(255, 255, 255, 0.23) 0px 3px 6px",
+>>>>>>> Stashed changes
                     borderRadius: "5px",
+                    border: `1px solid ${theme.palette.divider}`,
                 }}
             >
                 <Box>
@@ -84,7 +97,11 @@ function SignIn() {
                 <Box>
                     <Box>
                         <Typography variant="subtitle1" component="p" sx={{ color: theme.palette.text.secondary }}>
+<<<<<<< Updated upstream
                             Glab to see you again👋
+=======
+                            Glad to see you again👋
+>>>>>>> Stashed changes
                         </Typography>
                         <Typography variant="subtitle1" component="p" sx={{ color: theme.palette.text.secondary }}>
                             Sign in to your account below.
@@ -95,7 +112,7 @@ function SignIn() {
                 {/*email and password fields*/}
                 <Box>
                     <FormControl fullWidth>
-                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <FormLabel htmlFor="email" sx={{ color: theme.palette.text.primary }}>Email</FormLabel>
                         <TextField
                             id="email"
                             name="email"
@@ -119,7 +136,7 @@ function SignIn() {
 
                 <Box>
                     <FormControl fullWidth>
-                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <FormLabel htmlFor="password" sx={{ color: theme.palette.text.primary }}>Password</FormLabel>
                         <TextField
                             id="password"
                             name="password"
@@ -143,7 +160,9 @@ function SignIn() {
 
                 {/*forgotten pass link*/}
                 <Box>
-                    <Link to="/resetPassword">Forgot your password?</Link>
+                    <Link to="/resetPassword" style={{ color: theme.palette.primary.main, textDecoration: 'none' }}>
+                        Forgot your password?
+                    </Link>
                 </Box>
 
                 {/*Sign in button*/}
@@ -162,6 +181,7 @@ function SignIn() {
 
                 {/*Sign up link*/}
                 <Box>
+<<<<<<< Updated upstream
                     <Typography variant="subtitle2" component="p"
                         sx={{
                             textAlign: "center",
@@ -169,6 +189,10 @@ function SignIn() {
                         }}>
                         Don't have an account?{' '}
                         <Link to="/signUp" style={{ fontWeight: "bold", textDecoration: "none" }}>
+=======
+                    <Typography variant="subtitle2" component="p" sx={{ textAlign: "center", color: theme.palette.text.secondary }}>                            Don't have an account?{' '}
+                        <Link to="/signUp" style={{ fontWeight: "bold", textDecoration: "none", color: theme.palette.primary.main }}>
+>>>>>>> Stashed changes
                             Sign Up
                         </Link>
                     </Typography>

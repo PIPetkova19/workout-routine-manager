@@ -52,6 +52,7 @@ export default function App() {
     setDrawerOpen(open);
   };
   const [selected, setSelected] = useState({});
+<<<<<<< Updated upstream
 
   //sign out
   const { handleSignOut } = use(AuthContext);
@@ -87,6 +88,29 @@ export default function App() {
           <AppBar
             position="fixed"
             sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+=======
+  
+  return (
+    <BrowserRouter>
+      <Box sx={{ display: "flex", minHeight: "100vh" }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          sx={{ 
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          }}
+        >
+          <Toolbar
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              position: "relative",
+            }}
+>>>>>>> Stashed changes
           >
             <Toolbar
               sx={{
@@ -110,6 +134,7 @@ export default function App() {
                   <MenuIcon />
                 </IconButton>
               )}
+<<<<<<< Updated upstream
               <Box
                 sx={{
                   position: "absolute",
@@ -208,10 +233,67 @@ export default function App() {
         )}
 
         {/*change color of background for intro page and the other pages*/}
+=======
+              <FitBitIcon sx={{ color: theme.palette.primary.main }} />
+              <Typography variant="h6" noWrap component="div" sx={{ ml: 1, color: theme.palette.text.primary }}>
+                Fitness Tracker
+              </Typography>
+            </Box>
+            <ThemeToggle />
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant={isMobile ? "temporary" : "permanent"}
+          open={drawerOpen}
+          onClose={toggleDrawer(false)}
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: drawerWidth,
+              boxSizing: "border-box",
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+              borderRight: `1px solid ${theme.palette.divider}`,
+            },
+          }}
+        >
+          <Toolbar />
+          <Box onClick={toggleDrawer(false)} sx={{ overflow: "auto" }}>
+            <List>
+              <Link to={"/"} style={{ textDecoration: 'none' }}>
+                <CreateListItem iconName="Dashboard" text="Dashboard" />
+              </Link>
+              <Link to={"/routines"} style={{ textDecoration: 'none' }}>
+                <CreateListItem iconName="Routines" text="Routines" />
+              </Link>
+              <Link to={"/calendar"} style={{ textDecoration: 'none' }}>
+                <CreateListItem iconName="Calendar" text="Calendar" />
+              </Link>
+              <Link to={"/assistant"} style={{ textDecoration: 'none' }}>
+                <CreateListItem iconName="Assistant" text="AI Assistant" />
+              </Link>
+            </List>
+          </Box>
+          <Box onClick={toggleDrawer(false)} sx={{ mt: "auto" }}>
+            <Divider />
+            <List sx={{ display: "flex", justifyContent: "center" }}>
+              <Link to={"/accsettings"} style={{ textDecoration: 'none' }}>
+                <BasicButton iconName="Account" />
+              </Link>
+              <Link to={"/appsettings"} style={{ textDecoration: 'none' }}>
+                <BasicButton iconName="Settings" />
+              </Link>
+            </List>
+          </Box>
+        </Drawer>
+>>>>>>> Stashed changes
         <Box
           component="main"
           sx={{
+            flexGrow: 1,
             p: 3,
+<<<<<<< Updated upstream
             width: "100%",
             backgroundColor:
               isIntroPage
@@ -268,6 +350,30 @@ export default function App() {
             } />
 
           </Routes>
+=======
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            minHeight: "100vh",
+            backgroundColor: theme.palette.background.default,
+            color: theme.palette.text.primary,
+          }}
+        >
+          <Toolbar />
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/routines" element={<Routines />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/assistant" element={<Assistant />} />
+              <Route path="/appsettings" element={<AppSettings />} />
+              <Route path="/accsettings" element={<AccSettings />} />
+              <Route path="/signUp" element={<SignUp />} />
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
+              <Route path="/updateUser" element={<UpdateUser />} />
+              <Route path="/verifyUser" element={<VerifyUser />} />
+            </Routes>
+          </AuthProvider>
+>>>>>>> Stashed changes
         </Box>
       </Box>
     );

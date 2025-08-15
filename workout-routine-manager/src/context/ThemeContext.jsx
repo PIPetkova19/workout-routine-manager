@@ -20,6 +20,8 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('theme-mode', mode);
+    // Update document body class for global CSS
+    document.body.className = `theme-${mode}`;
   }, [mode]);
 
   const toggleTheme = () => {
@@ -30,18 +32,30 @@ export const ThemeProvider = ({ children }) => {
     palette: {
       mode, 
       primary: {
-        main: '#1976d2',
+        main: mode === 'light' ? '#1976d2' : '#90caf9',
+        light: mode === 'light' ? '#42a5f5' : '#e3f2fd',
+        dark: mode === 'light' ? '#1565c0' : '#42a5f5',
+        contrastText: mode === 'light' ? '#ffffff' : '#000000',
       },
       secondary: {
-        main: '#dc004e',
+        main: mode === 'light' ? '#dc004e' : '#f48fb1',
+        light: mode === 'light' ? '#ff5983' : '#fce4ec',
+        dark: mode === 'light' ? '#9a0036' : '#c2185b',
+        contrastText: mode === 'light' ? '#ffffff' : '#000000',
       },
       background: {
-        default: mode === 'light' ? '#f5f5f5' : '#121212',
+        default: mode === 'light' ? '#fafafa' : '#121212',
         paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
       },
       text: {
-        primary: mode === 'light' ? '#213547' : '#ffffff',
-        secondary: mode === 'light' ? '#666666' : '#b0b0b0',
+        primary: mode === 'light' ? '#212121' : '#ffffff',
+        secondary: mode === 'light' ? '#757575' : '#b0b0b0',
+      },
+      divider: mode === 'light' ? '#e0e0e0' : '#424242',
+      action: {
+        active: mode === 'light' ? '#757575' : '#b0b0b0',
+        hover: mode === 'light' ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.08)',
+        selected: mode === 'light' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.16)',
       },
     }, 
     //custom for intro page
@@ -63,6 +77,8 @@ export const ThemeProvider = ({ children }) => {
         styleOverrides: {
           root: {
             backgroundColor: mode === 'light' ? '#1976d2' : '#1e1e1e',
+            color: mode === 'light' ? '#ffffff' : '#ffffff',
+            boxShadow: mode === 'light' ? '0 2px 4px rgba(0,0,0,0.1)' : '0 2px 4px rgba(0,0,0,0.3)',
           },
         },
       },
@@ -70,7 +86,8 @@ export const ThemeProvider = ({ children }) => {
         styleOverrides: {
           paper: {
             backgroundColor: mode === 'light' ? '#ffffff' : '#1e1e1e',
-            borderRight: mode === 'light' ? '1px solid #e0e0e0' : '1px solid #333333',
+            borderRight: mode === 'light' ? '1px solid #e0e0e0' : '1px solid #424242',
+            color: mode === 'light' ? '#212121' : '#ffffff',
           },
         },
       },
@@ -78,10 +95,63 @@ export const ThemeProvider = ({ children }) => {
         styleOverrides: {
           root: {
             backgroundColor: mode === 'light' ? '#ffffff' : '#1e1e1e',
-            border: mode === 'light' ? '1px solid #e0e0e0' : '1px solid #333333',
+            border: mode === 'light' ? '1px solid #e0e0e0' : '1px solid #424242',
+            color: mode === 'light' ? '#212121' : '#ffffff',
+            boxShadow: mode === 'light' ? '0 2px 4px rgba(0,0,0,0.1)' : '0 2px 4px rgba(0,0,0,0.3)',
           },
         },
       },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            borderRadius: 8,
+          },
+        },
+      },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            color: mode === 'light' ? '#1976d2' : '#90caf9',
+            '&:hover': {
+              color: mode === 'light' ? '#1565c0' : '#42a5f5',
+            },
+          },
+        },
+      },
+      MuiListItem: {
+        styleOverrides: {
+          root: {
+            '&:hover': {
+              backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.08)',
+            },
+          },
+        },
+      },
+    },
+    typography: {
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      h1: {
+        fontWeight: 500,
+      },
+      h2: {
+        fontWeight: 500,
+      },
+      h3: {
+        fontWeight: 500,
+      },
+      h4: {
+        fontWeight: 500,
+      },
+      h5: {
+        fontWeight: 500,
+      },
+      h6: {
+        fontWeight: 500,
+      },
+    },
+    shape: {
+      borderRadius: 8,
     },
   });
 
