@@ -60,39 +60,3 @@ button:focus-visible {
 * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-<<<<<<< Updated upstream
-=======
-
-/* Ensure proper theme colors for links */
-a {
-  color: inherit;
-}
-
-/* Remove any default browser styling that might conflict */
-* {
-  box-sizing: border-box;
-}
-
-/* Ensure proper contrast for text in both themes */
-.theme-light {
-  color-scheme: light;
-}
-
-.theme-dark {
-  color-scheme: dark;
-}
-
-/* Fix for Material-UI components */
-.MuiDrawer-paper {
-  background-color: inherit !important;
-}
-
-.MuiAppBar-root {
-  background-color: inherit !important;
-}
-
-/* Ensure proper scrolling */
-html, body {
-  scroll-behavior: smooth;
-}
->>>>>>> Stashed changes

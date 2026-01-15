@@ -26,24 +26,11 @@ const ThemeToggle = () => {
           backgroundColor: mode === 'light' ? '#f5f5f5' : '#424242',
           cursor: 'pointer',
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-<<<<<<< Updated upstream
           boxShadow: '0 2px 4px rgba(233, 16, 16, 0.2)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           transform: isAnimating ? 'scale(1.1)' : 'scale(1)',
-=======
-          border: `2px solid ${mode === 'light' ? '#1976d2' : '#90caf9'}`,
-          '&:hover': {
-            transform: 'scale(1.05)',
-            boxShadow: mode === 'light' 
-              ? '0 4px 12px rgba(25, 118, 210, 0.3)' 
-              : '0 4px 12px rgba(144, 202, 249, 0.3)',
-          },
-          '&:active': {
-            transform: 'scale(0.95)',
-          },
->>>>>>> Stashed changes
         }}
         onClick={handleToggle}
       >

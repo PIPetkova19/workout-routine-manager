@@ -193,18 +193,13 @@ function AuthProvider({ children }) {
     };
 
     return (
-<<<<<<< Updated upstream
         <AuthContext value={{
             user, isLoading, handleSignIn, handleSignOut, handleSignUp,
-=======
-        <AuthContext.Provider value={{
-            user, handleSignIn, handleSignOut, handleSignUp,
->>>>>>> Stashed changes
             handleSignUpGoogle, handleForgottenPassword, handleUserUpdate,
             handleSignUpWithOtp, handleVerifyOtp
         }}>
             {children}
-        </AuthContext.Provider>
+        </AuthContext>
     );
 }
 
